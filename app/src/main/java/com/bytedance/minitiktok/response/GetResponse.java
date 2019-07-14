@@ -5,8 +5,10 @@ import com.bytedance.minitiktok.model.Video;
 import java.util.List;
 
 public class GetResponse {
-    @SerializedName("feeds") List<Video>videos;
-    @SerializedName("success") Boolean success;
+    @SerializedName("feeds")
+    private List<Video>videos;
+    @SerializedName("success")
+    private Boolean success;
 
     public List<Video> getVideos() { return videos; }
 

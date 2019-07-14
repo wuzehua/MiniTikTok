@@ -39,9 +39,9 @@ class VideoListViewHolder(view: View) : RecyclerView.ViewHolder(view)
         }
     }
 
-    fun bind(data: Video?, activity: Activity,position: Int)
+    fun bind(data: Video?, activity: Activity?,position: Int)
     {
-        if(data == null) return
+        if(data == null || activity == null) return
 
         Glide.with(activity).load(data.imageUrl).into(mImage)
         mNameText.text = data.userName
