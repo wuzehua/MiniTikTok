@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">MiniTikTok</string>
+    <string name="new_page_label">最新发布</string>
 </resources>

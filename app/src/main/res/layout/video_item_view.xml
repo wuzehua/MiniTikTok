@@ -3,14 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="140dp">
+    android:layout_height="114dp">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/card"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginTop="6dp"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="2dp"
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="18dp"
         android:clickable="true"
@@ -32,7 +32,7 @@
 
             <ImageView
                 android:id="@+id/img"
-                android:layout_width="140dp"
+                android:layout_width="90dp"
                 android:layout_height="match_parent"
                 android:adjustViewBounds="true"
                 android:background="#c5c5c5"

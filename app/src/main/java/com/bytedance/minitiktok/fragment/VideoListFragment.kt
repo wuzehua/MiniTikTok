@@ -97,6 +97,7 @@ class VideoListFragment(service: IMiniDouyinService?) : Fragment() {
                         mAdapter?.setItems(mVideos)
                         mAdapter?.notifyDataSetChanged()
                         view?.mRefreshLayout?.isRefreshing = false
+                        Toast.makeText(activity,"列表已更新",Toast.LENGTH_SHORT).show()
                     }
                 }
             }
