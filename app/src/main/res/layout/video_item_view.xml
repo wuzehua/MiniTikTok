@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="140dp"
+    >
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/card"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="18dp"
+        app:cardCornerRadius="10dp"
+        android:clipChildren="true"
+        android:clickable="true"
+        android:focusable="true"
+        android:stateListAnimator="@animator/lift_on_touch"
+        android:foreground="?android:attr/selectableItemBackground"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:targetApi="lollipop">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            >
+
+            <ImageView
+                android:id="@+id/img"
+                android:layout_width="140dp"
+                android:layout_height="match_parent"
+                android:adjustViewBounds="true"
+                android:background="#c5c5c5"
+                android:scaleType="centerCrop"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                >
+
+                <TextView
+                        android:id="@+id/nameText"
+                        android:layout_width="match_parent"
+                        android:layout_weight="1"
+                        android:textStyle="bold"
+                        android:gravity="center_vertical|start"
+                        android:text="test"
+                        android:paddingStart="10dp"
+                        android:layout_height="0dp"
+                        android:textSize="20sp"
+                        android:singleLine="true"
+                        android:textColor="@android:color/black"
+                        android:maxLength="10"
+                        tools:ignore="NestedWeights" />
+
+                <TextView
+                        android:id="@+id/updateDateText"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:text="1234"
+                        android:maxLength="10"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical|start"
+                        android:paddingStart="10dp"
+                        android:textSize="13sp"
+                />
+
+            </LinearLayout>
+
+
+
+        </LinearLayout>
+
+    </android.support.v7.widget.CardView>
+
+</android.support.constraint.ConstraintLayout>
