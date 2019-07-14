@@ -43,17 +43,20 @@ class VideoListFragment(service: IMiniDouyinService?) : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.video_list_fragment, container, false)
-        mRefreshLayout.setOnRefreshListener(object : SwipeRefreshLayout.OnRefreshListener {
+        val recyclerView = view.mVideoListRV
+        val refreshLayout = view.mRefreshLayout
+
+        refreshLayout.setOnRefreshListener(object : SwipeRefreshLayout.OnRefreshListener {
             override fun onRefresh() {
                 fetchFeed()
-                mRefreshLayout.isRefreshing = false
+                refreshLayout.isRefreshing = false
             }
 
         })
 
         mAdapter = VideoListViewAdapter(activity)
-        mVideoListRV.layoutManager = VegaLayoutManager()
-        mVideoListRV.adapter = mAdapter
+        recyclerView.layoutManager = VegaLayoutManager()
+        recyclerView.adapter = mAdapter
         fetchFeed()
 
         return view
