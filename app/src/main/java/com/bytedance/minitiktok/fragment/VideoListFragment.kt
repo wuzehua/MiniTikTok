@@ -49,7 +49,7 @@ class VideoListFragment(service: IMiniDouyinService?) : Fragment() {
         refreshLayout.setOnRefreshListener(object : SwipeRefreshLayout.OnRefreshListener {
             override fun onRefresh() {
                 fetchFeed()
-                refreshLayout.isRefreshing = false
+                //refreshLayout.isRefreshing = false
             }
 
         })
@@ -91,10 +91,12 @@ class VideoListFragment(service: IMiniDouyinService?) : Fragment() {
                 if (result != null) {
                     if (result.isEmpty()) {
                         Toast.makeText(null, "Fail", Toast.LENGTH_LONG).show()
+                        view?.mRefreshLayout?.isRefreshing = false
                     } else {
                         mVideos = result
                         mAdapter?.setItems(mVideos)
                         mAdapter?.notifyDataSetChanged()
+                        view?.mRefreshLayout?.isRefreshing = false
                     }
                 }
             }
