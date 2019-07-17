@@ -67,7 +67,7 @@ class VideoListFragment(service: IMiniDouyinService?) : Fragment() {
         class LoadDBAsyncTask(): AsyncTask<Objects,Objects,List<Video>>()
         {
             override fun doInBackground(vararg p0: Objects?): List<Video> {
-                mVideosDB = VideoDataBase.getInstance(activity!!).getAllVideos()
+                mVideosDB = VideoDataBase.getInstance(context = activity!!).getAllVideos()
                 if(mVideosDB.isEmpty())
                 {
                     if(mService == null)
@@ -104,6 +104,9 @@ class VideoListFragment(service: IMiniDouyinService?) : Fragment() {
                 }
             }
         }
+
+        var getVideosAsyncTask = LoadDBAsyncTask()
+        getVideosAsyncTask.execute()
     }
 
     private fun fetchFeed() {

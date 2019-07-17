@@ -9,6 +9,7 @@ import android.transition.TransitionInflater
 import android.view.Window
 import androidx.annotation.RequiresApi
 import com.bytedance.minitiktok.api.IMiniDouyinService
+import com.bytedance.minitiktok.db.VideoDataBase
 import com.bytedance.minitiktok.fragment.VideoListFragment
 import com.bytedance.minitiktok.viewpager.FragmentViewPagerAdapter
 import kotlinx.android.synthetic.main.activity_main.*
@@ -30,6 +31,7 @@ class MainActivity : AppCompatActivity() {
         val pagerAdapter = FragmentViewPagerAdapter(supportFragmentManager)
         pagerAdapter.addFragment(videoListFragment)
         vp_viewPager.adapter = pagerAdapter
+        VideoDataBase.getInstance(this@MainActivity)
     }
 
     private fun getService(): IMiniDouyinService?
