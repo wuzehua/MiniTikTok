@@ -4,8 +4,7 @@ import androidx.room.*
 import com.bytedance.minitiktok.model.Video
 
 @Dao
-interface VideoDAO
-{
+interface VideoDAO {
     @Query("SELECT * FROM  videos ORDER BY update_date DESC")
     fun getAllVideos(): List<Video>
 
@@ -16,17 +15,8 @@ interface VideoDAO
     fun deleteAllVideos()
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun addVideo(video: Video)
-
-    @Query("UPDATE videos SET liked = :likeStat WHERE _id = :id")
-    fun updateVideoStat(likeStat:Int, id: String)
-
-    @Query("SELECT * FROM videos WHERE liked = 1")
-    fun getLikedVideos(): List<Video>
+    fun insertVideo(video: Video)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertVideos(videos: List<Video>)
-
-
-
 }

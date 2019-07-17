@@ -10,20 +10,13 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.bumptech.glide.load.engine.bitmap_recycle.IntegerArrayAdapter
 import com.bytedance.minitiktok.R
 import com.bytedance.minitiktok.api.IMiniDouyinService
-import com.bytedance.minitiktok.db.VideoDataBase
+import com.bytedance.minitiktok.db.DataBase
 import com.bytedance.minitiktok.model.Video
 import com.bytedance.minitiktok.recyclerview.VideoListViewAdapter
-import com.bytedance.minitiktok.response.GetResponse
 import com.stone.vega.library.VegaLayoutManager
-import kotlinx.android.synthetic.main.video_list_fragment.*
-import retrofit2.Retrofit
 import kotlinx.android.synthetic.main.video_list_fragment.view.*
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import java.io.IOException
 import java.util.*
 import kotlin.collections.ArrayList
@@ -67,7 +60,7 @@ class VideoListFragment(service: IMiniDouyinService?) : Fragment() {
         class LoadDBAsyncTask(): AsyncTask<Objects,Objects,List<Video>>()
         {
             override fun doInBackground(vararg p0: Objects?): List<Video> {
-                mVideosDB = VideoDataBase.getInstance(context = activity!!).getAllVideos()
+                mVideosDB = DataBase.getInstance(activity!!).getAllVideos()
                 if(mVideosDB.isEmpty())
                 {
                     if(mService == null)
@@ -80,8 +73,8 @@ class VideoListFragment(service: IMiniDouyinService?) : Fragment() {
                         try {
                             val response = mService!!.videos.execute()
                             if (response.isSuccessful && response.body() != null && response.body()!!.success) {
-                                VideoDataBase.getInstance(activity!!).insertVideos(response.body()!!.videos)
-                                mVideosDB = VideoDataBase.getInstance(activity!!).getAllVideos()
+                                DataBase.getInstance(activity!!).insertVideos(response.body()!!.videos)
+                                mVideosDB = DataBase.getInstance(activity!!).getAllVideos()
                             } else {
                                 return emptyList()
                             }

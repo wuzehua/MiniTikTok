@@ -1,4 +1,5 @@
 package com.bytedance.minitiktok.model;
+
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
@@ -37,38 +38,4 @@ public class Video {
     @SerializedName("updatedAt")
     @ColumnInfo(name = "update_date")
     public String updateDate;
-
-
-    @ColumnInfo(name = "liked")
-    public boolean liked = false;
-
-    /*
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
-
-    public String getVideoUrl() {
-        return videoUrl;
-    }
-
-    public void setVideoUrl(String videoUrl) {
-        this.videoUrl = videoUrl;
-    }
-
-    public String getUpdateDate() { return updateDate; }
-
-    public void setUpdateDate(String updateDate) { this.updateDate = updateDate; }
-    */
 }

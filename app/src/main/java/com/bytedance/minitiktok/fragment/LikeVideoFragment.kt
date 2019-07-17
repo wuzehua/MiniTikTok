@@ -89,10 +89,10 @@ class LikeVideoFragment(service: IMiniDouyinService?) : Fragment() {
                         Toast.makeText(null, "Fail", Toast.LENGTH_LONG).show()
                         view?.mRefreshLayout?.isRefreshing = false
                     } else {
-                        val ids = Array<String>()
-                        for (item in result) {
-                            if (ids.contains(item))
-                        }
+//                        val ids = Array<String>()
+//                        for (item in result) {
+//                            if (ids.contains(item))
+//                        }
                         mVideos = result
                         mAdapter?.setItems(mVideos)
                         mAdapter?.notifyDataSetChanged()
