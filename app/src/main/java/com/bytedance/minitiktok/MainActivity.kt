@@ -7,9 +7,13 @@ import android.transition.Explode
 import android.transition.Slide
 import android.transition.TransitionInflater
 import android.view.Window
+import android.widget.RadioGroup
 import androidx.annotation.RequiresApi
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import com.bytedance.minitiktok.api.IMiniDouyinService
-import com.bytedance.minitiktok.db.VideoDataBase
+import com.bytedance.minitiktok.fragment.LikeVideoFragment
+import com.bytedance.minitiktok.db.DataBase
 import com.bytedance.minitiktok.fragment.VideoListFragment
 import com.bytedance.minitiktok.viewpager.FragmentViewPagerAdapter
 import kotlinx.android.synthetic.main.activity_main.*
@@ -31,25 +35,46 @@ class MainActivity : AppCompatActivity() {
         val pagerAdapter = FragmentViewPagerAdapter(supportFragmentManager)
         pagerAdapter.addFragment(videoListFragment)
         vp_viewPager.adapter = pagerAdapter
-        VideoDataBase.getInstance(this@MainActivity)
+
+        radio.setOnCheckedChangeListener(object : RadioGroup.OnCheckedChangeListener {
+            override fun onCheckedChanged(radioGroup: RadioGroup?, radioId: Int) {
+                when (radioId) {
+                    R.id.recommend_tab -> {
+                        supportFragmentManager.beginTransaction().addToBackStack(null)
+                            .replace(R.id.vp_viewPager, VideoListFragment(getService())).commit()
+                    }
+                    R.id.add_tab -> {
+                        supportFragmentManager.beginTransaction().addToBackStack(null)
+                            .replace(R.id.vp_viewPager, VideoListFragment(getService())).commit()
+                    }
+                    R.id.like_tab -> {
+                        supportFragmentManager.beginTransaction().addToBackStack(null)
+                            .replace(R.id.vp_viewPager, LikeVideoFragment(getService())).commit()
+                    }
+                    R.id.my_tab -> {
+                        supportFragmentManager.beginTransaction().addToBackStack(null)
+                            .replace(R.id.vp_viewPager, VideoListFragment(getService())).commit()
+                    }
+                }
+            }
+
+        })
+        DataBase.getInstance(this@MainActivity)
     }
 
-    private fun getService(): IMiniDouyinService?
-    {
-        if (retrofit == null)
-        {
+    private fun getService(): IMiniDouyinService? {
+        if (retrofit == null) {
             retrofit = Retrofit.Builder()
                 .baseUrl(IMiniDouyinService.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
         }
 
-        if(miniDouyinService == null)
-        {
+        if (miniDouyinService == null) {
             miniDouyinService = retrofit?.create(IMiniDouyinService::class.java)
         }
 
-        if(miniDouyinService == null)
+        if (miniDouyinService == null)
             println("Service NULL")
         return miniDouyinService
     }
