@@ -32,28 +32,29 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         val videoListFragment = VideoListFragment(getService())
-        val pagerAdapter = FragmentViewPagerAdapter(supportFragmentManager)
-        pagerAdapter.addFragment(videoListFragment)
-        vp_viewPager.adapter = pagerAdapter
+        val likeVideoFragment = LikeVideoFragment(getService())
+        //val pagerAdapter = FragmentViewPagerAdapter(supportFragmentManager)
+        //pagerAdapter.addFragment(videoListFragment)
+        //vp_viewPager.adapter = pagerAdapter
 
         radio.setOnCheckedChangeListener(object : RadioGroup.OnCheckedChangeListener {
             override fun onCheckedChanged(radioGroup: RadioGroup?, radioId: Int) {
                 when (radioId) {
                     R.id.recommend_tab -> {
                         supportFragmentManager.beginTransaction().addToBackStack(null)
-                            .replace(R.id.vp_viewPager, VideoListFragment(getService())).commit()
+                            .replace(R.id.fragment_container, videoListFragment).commit()
                     }
                     R.id.add_tab -> {
-                        supportFragmentManager.beginTransaction().addToBackStack(null)
-                            .replace(R.id.vp_viewPager, VideoListFragment(getService())).commit()
+//                        supportFragmentManager.beginTransaction().addToBackStack(null)
+//                            .replace(R.id.fragment_container, VideoListFragment(getService())).commit()
                     }
                     R.id.like_tab -> {
                         supportFragmentManager.beginTransaction().addToBackStack(null)
-                            .replace(R.id.vp_viewPager, LikeVideoFragment(getService())).commit()
+                            .replace(R.id.fragment_container, likeVideoFragment).commit()
                     }
                     R.id.my_tab -> {
                         supportFragmentManager.beginTransaction().addToBackStack(null)
-                            .replace(R.id.vp_viewPager, VideoListFragment(getService())).commit()
+                            .replace(R.id.fragment_container, VideoListFragment(getService())).commit()
                     }
                 }
             }

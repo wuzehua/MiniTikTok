@@ -2,6 +2,7 @@ package com.bytedance.minitiktok.recyclerview
 
 import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bytedance.minitiktok.R
 import com.bytedance.minitiktok.VideoActivity
+import com.bytedance.minitiktok.VideoShowActivity
 import com.bytedance.minitiktok.model.Video
 import java.text.FieldPosition
 
@@ -37,7 +39,9 @@ class VideoListViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         mDateText.text = data.updateDate
         mCard.setOnClickListener(object : View.OnClickListener {
             override fun onClick(view: View?) {
-                VideoActivity.launch(activity, data.videoUrl)
+                val intent = Intent(activity,VideoShowActivity::class.java)
+                intent.putExtra("position",position)
+                activity.startActivity(intent)
             }
 
         })

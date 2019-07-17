@@ -4,8 +4,8 @@
               android:layout_height="match_parent">
 
 
-    <SurfaceView
-            android:id="@+id/sv_surfaceView"
+    <com.bytedance.minitiktok.player.VideoPlayerIJK
+            android:id="@+id/ijkPlayer"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_centerInParent="true"

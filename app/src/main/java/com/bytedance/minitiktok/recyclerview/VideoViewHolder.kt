@@ -9,17 +9,19 @@ import android.widget.ProgressBar
 import android.widget.VideoView
 import androidx.recyclerview.widget.RecyclerView
 import com.bytedance.minitiktok.R
+import com.bytedance.minitiktok.model.Video
+import com.bytedance.minitiktok.player.VideoPlayerIJK
 import kotlinx.android.synthetic.main.video_view_layout.view.*
 import tv.danmaku.ijk.media.player.IjkMediaPlayer
 
 class VideoViewHolder(view: View) : RecyclerView.ViewHolder(view)
 {
     private var mVideoPlayer: IjkMediaPlayer? = null
-    private var mSurfaceView: SurfaceView
+    private var mPlayer: VideoPlayerIJK
     private var mProgressBar: ProgressBar
 
     init {
-        mSurfaceView = view.findViewById(R.id.sv_surfaceView)
+        mPlayer = view.findViewById(R.id.ijkPlayer)
         mProgressBar = view.findViewById(R.id.pb_videoProgress)
     }
 
@@ -32,6 +34,12 @@ class VideoViewHolder(view: View) : RecyclerView.ViewHolder(view)
         }
     }
 
+    fun bind(data: Video?, position: Int)
+    {
+        if(data == null) return
 
+        mPlayer.setVideoPath(data.videoUrl)
+        mProgressBar.progress = 0
+    }
 
 }
