@@ -4,11 +4,17 @@ apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
 
+apply plugin: 'kotlin-kapt'
+
+kapt {
+    generateStubs = true
+}
+
 android {
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.bytedance.minitiktok"
-        minSdkVersion 15
+        minSdkVersion 19
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
@@ -47,6 +53,10 @@ dependencies {
     implementation 'tv.danmaku.ijk.media:ijkplayer-armv7a:0.8.8'
 
     implementation 'com.github.DingMouRen:LayoutManagerGroup:1e6f4f96eb'
+
+    implementation 'android.arch.persistence.room:runtime:1.1.1'
+    implementation 'android.arch.persistence.room:rxjava2:1.1.1'
+    kapt 'android.arch.persistence.room:compiler:1.1.1'
 }
 
 configurations.all {
@@ -54,7 +64,6 @@ configurations.all {
         def requested = details.requested
         if (requested.group == 'com.android.support') {
             if (!requested.name.startsWith("multidex")) {
-                //这里指定需要统一的依赖版本,这里统一为26.0.0-alpha1
                 details.useVersion '28.0.0'
             }
         }

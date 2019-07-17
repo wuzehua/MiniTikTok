@@ -13,6 +13,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.bumptech.glide.load.engine.bitmap_recycle.IntegerArrayAdapter
 import com.bytedance.minitiktok.R
 import com.bytedance.minitiktok.api.IMiniDouyinService
+import com.bytedance.minitiktok.db.VideoDataBase
 import com.bytedance.minitiktok.model.Video
 import com.bytedance.minitiktok.recyclerview.VideoListViewAdapter
 import com.bytedance.minitiktok.response.GetResponse
@@ -31,6 +32,7 @@ class VideoListFragment(service: IMiniDouyinService?) : Fragment() {
     private var mService: IMiniDouyinService? = service
     private var mAdapter: VideoListViewAdapter?
     private var mVideos: List<Video>
+    private var mVideosDB: List<Video> = ArrayList()
 
     init {
         mVideos = ArrayList()
@@ -53,11 +55,56 @@ class VideoListFragment(service: IMiniDouyinService?) : Fragment() {
         mAdapter = VideoListViewAdapter(activity)
         recyclerView.layoutManager = VegaLayoutManager()
         recyclerView.adapter = mAdapter
-        fetchFeed()
+        //fetchFeed()
+        initFromDB()
 
         return view
     }
 
+
+    private fun initFromDB()
+    {
+        class LoadDBAsyncTask(): AsyncTask<Objects,Objects,List<Video>>()
+        {
+            override fun doInBackground(vararg p0: Objects?): List<Video> {
+                mVideosDB = VideoDataBase.getInstance(activity!!).getAllVideos()
+                if(mVideosDB.isEmpty())
+                {
+                    if(mService == null)
+                    {
+                        Log.println(Log.WARN, "Service", "NULL Service")
+                        return emptyList()
+                    }
+                    else
+                    {
+                        try {
+                            val response = mService!!.videos.execute()
+                            if (response.isSuccessful && response.body() != null && response.body()!!.success) {
+                                VideoDataBase.getInstance(activity!!).insertVideos(response.body()!!.videos)
+                                mVideosDB = VideoDataBase.getInstance(activity!!).getAllVideos()
+                            } else {
+                                return emptyList()
+                            }
+                        } catch (e: IOException) {
+                            Log.e("mService execute", "IOException", e)
+                            return emptyList()
+                        }
+                    }
+                }
+
+                return mVideosDB
+            }
+
+            override fun onPostExecute(result: List<Video>?) {
+                super.onPostExecute(result)
+                if(result != null)
+                {
+                    mAdapter?.setItems(mVideosDB)
+                    mAdapter?.notifyDataSetChanged()
+                }
+            }
+        }
+    }
 
     private fun fetchFeed() {
         @SuppressLint("StaticFieldLeak")

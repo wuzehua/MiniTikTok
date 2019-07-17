@@ -1,22 +1,48 @@
 package com.bytedance.minitiktok.model;
+import androidx.annotation.NonNull;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 import com.google.gson.annotations.SerializedName;
 
+
+@Entity(tableName = "videos")
 public class Video {
 
-    @SerializedName("student_id") private String studentId;
-    @SerializedName("user_name") private String userName;
-    @SerializedName("image_url") private String imageUrl;
-    @SerializedName("video_url") private String videoUrl;
-    @SerializedName("updatedAt") private String updateDate;
+    @PrimaryKey
+    @NonNull
+    @SerializedName("_id")
+    @ColumnInfo(name = "_id")
+    public String id;
 
-    public String getStudentId() {
-        return studentId;
-    }
+    @SerializedName("student_id")
+    @ColumnInfo(name = "student_id")
+    public String studentId;
 
-    public void setStudentId(String studentId) {
-        this.studentId = studentId;
-    }
 
+    @SerializedName("user_name")
+    @ColumnInfo(name = "user_name")
+    public String userName;
+
+
+    @SerializedName("image_url")
+    @ColumnInfo(name = "image_url")
+    public String imageUrl;
+
+    @SerializedName("video_url")
+    @ColumnInfo(name = "video_url")
+    public String videoUrl;
+
+
+    @SerializedName("updatedAt")
+    @ColumnInfo(name = "update_date")
+    public String updateDate;
+
+
+    @ColumnInfo(name = "liked")
+    public boolean liked = false;
+
+    /*
     public String getUserName() {
         return userName;
     }
@@ -44,4 +70,5 @@ public class Video {
     public String getUpdateDate() { return updateDate; }
 
     public void setUpdateDate(String updateDate) { this.updateDate = updateDate; }
+    */
 }
