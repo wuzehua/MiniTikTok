@@ -1,7 +1,13 @@
 package com.bytedance.minitiktok
 
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.transition.Explode
+import android.transition.Slide
+import android.transition.TransitionInflater
+import android.view.Window
+import androidx.annotation.RequiresApi
 import com.bytedance.minitiktok.api.IMiniDouyinService
 import com.bytedance.minitiktok.fragment.VideoListFragment
 import com.bytedance.minitiktok.viewpager.FragmentViewPagerAdapter
@@ -14,9 +20,12 @@ class MainActivity : AppCompatActivity() {
     private var retrofit: Retrofit? = null
     private var miniDouyinService: IMiniDouyinService? = null
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContentView(R.layout.activity_main)
+
         val videoListFragment = VideoListFragment(getService())
         val pagerAdapter = FragmentViewPagerAdapter(supportFragmentManager)
         pagerAdapter.addFragment(videoListFragment)

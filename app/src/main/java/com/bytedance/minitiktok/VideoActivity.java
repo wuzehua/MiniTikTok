@@ -4,7 +4,12 @@ import android.app.Activity;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.transition.Fade;
+import android.transition.TransitionInflater;
+import android.view.Window;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import android.view.MenuItem;
@@ -24,7 +29,13 @@ public class VideoActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
+        }
+
         setContentView(R.layout.activity_video);
+
 
         ActionBar actionBar = getSupportActionBar();
 
@@ -48,8 +59,21 @@ public class VideoActivity extends AppCompatActivity {
             }
         });
         progressBar.setVisibility(View.VISIBLE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            setupWindowTransition();
+        }
     }
 
+
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    private void setupWindowTransition()
+    {
+        Fade fade = new Fade();
+        fade.setDuration(1000);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().setEnterTransition(fade);
+        }
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
