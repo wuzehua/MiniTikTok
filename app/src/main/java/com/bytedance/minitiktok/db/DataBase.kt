@@ -4,17 +4,21 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.bytedance.minitiktok.api.LikeDAO
 import com.bytedance.minitiktok.api.UserDAO
 import com.bytedance.minitiktok.api.VideoDAO
+import com.bytedance.minitiktok.model.Like
 import com.bytedance.minitiktok.model.User
 import com.bytedance.minitiktok.model.Video
 
-@Database(entities = [Video::class, User::class], version = 1, exportSchema = false)
+@Database(entities = [Video::class, User::class, Like::class], version = 1, exportSchema = false)
 abstract class DataBase : RoomDatabase() {
 
     abstract fun VideoDao(): VideoDAO
 
     abstract fun UserDao(): UserDAO
+
+    abstract fun LikeDao(): LikeDAO
 
     companion object {
         @Volatile
@@ -89,6 +93,39 @@ abstract class DataBase : RoomDatabase() {
 
     fun insertUsers(users: List<User>) {
         UserDao().insertVideos(users)
+    }
+
+    // Like
+    fun getAllLikes(): List<Like> {
+        return LikeDao().getAllLikes()
+    }
+
+    fun getisLiked(user_name: String, video_id: String): Boolean {
+        return LikeDao().getisLiked(user_name, video_id).isNotEmpty()
+    }
+
+    fun getLikedVideo(user_name: String): String {
+        return LikeDao().getLikedVideo(user_name)
+    }
+
+    fun getLikedUser(video_id: String): String {
+        return LikeDao().getLikedUser(video_id)
+    }
+
+    fun deleteLike(user_name: String, video_id: String) {
+        LikeDao().deleteLike(user_name, video_id)
+    }
+
+    fun deleteAllLikes() {
+        LikeDao().deleteAllLikes()
+    }
+
+    fun insertLike(like: Like) {
+        LikeDao().insertLike(like)
+    }
+
+    fun insertLikes(likes: List<Like>) {
+        LikeDao().insertLikes(likes)
     }
 
 }

@@ -8,7 +8,7 @@ interface VideoDAO {
     @Query("SELECT * FROM  videos ORDER BY update_date DESC")
     fun getAllVideos(): List<Video>
 
-    @Query("DELETE FROM videos WHERE _id = :videoID")
+    @Query("DELETE FROM videos WHERE video_id = :videoID")
     fun deleteVideo(videoID: String)
 
     @Query("DELETE FROM videos")

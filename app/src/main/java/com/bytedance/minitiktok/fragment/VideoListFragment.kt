@@ -1,14 +1,18 @@
 package com.bytedance.minitiktok.fragment
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.os.AsyncTask
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.annotation.UiThread
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.bytedance.minitiktok.R
 import com.bytedance.minitiktok.api.IMiniDouyinService
@@ -18,6 +22,7 @@ import com.bytedance.minitiktok.recyclerview.VideoListViewAdapter
 import com.stone.vega.library.VegaLayoutManager
 import kotlinx.android.synthetic.main.video_list_fragment.view.*
 import java.io.IOException
+import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -48,58 +53,9 @@ class VideoListFragment(service: IMiniDouyinService?) : Fragment() {
         mAdapter = VideoListViewAdapter(activity)
         recyclerView.layoutManager = VegaLayoutManager()
         recyclerView.adapter = mAdapter
-        //fetchFeed()
-        initFromDB()
+        fetchFeed()
 
         return view
-    }
-
-
-    private fun initFromDB()
-    {
-        class LoadDBAsyncTask(): AsyncTask<Objects,Objects,List<Video>>()
-        {
-            override fun doInBackground(vararg p0: Objects?): List<Video> {
-                mVideosDB = DataBase.getInstance(activity!!).getAllVideos()
-                if(mVideosDB.isEmpty())
-                {
-                    if(mService == null)
-                    {
-                        Log.println(Log.WARN, "Service", "NULL Service")
-                        return emptyList()
-                    }
-                    else
-                    {
-                        try {
-                            val response = mService!!.videos.execute()
-                            if (response.isSuccessful && response.body() != null && response.body()!!.success) {
-                                DataBase.getInstance(activity!!).insertVideos(response.body()!!.videos)
-                                mVideosDB = DataBase.getInstance(activity!!).getAllVideos()
-                            } else {
-                                return emptyList()
-                            }
-                        } catch (e: IOException) {
-                            Log.e("mService execute", "IOException", e)
-                            return emptyList()
-                        }
-                    }
-                }
-
-                return mVideosDB
-            }
-
-            override fun onPostExecute(result: List<Video>?) {
-                super.onPostExecute(result)
-                if(result != null)
-                {
-                    mAdapter?.setItems(mVideosDB)
-                    mAdapter?.notifyDataSetChanged()
-                }
-            }
-        }
-
-        var getVideosAsyncTask = LoadDBAsyncTask()
-        getVideosAsyncTask.execute()
     }
 
     private fun fetchFeed() {
@@ -107,37 +63,53 @@ class VideoListFragment(service: IMiniDouyinService?) : Fragment() {
         class GetVideosAsyncTask() : AsyncTask<Objects, Objects, List<Video>>() {
 
             override fun doInBackground(vararg p0: Objects?): List<Video> {
+                val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ")
+                simpleDateFormat.timeZone = TimeZone.getTimeZone("UTC")
+                val sharedPreferences = context!!.getSharedPreferences("MiniTikTok", Context.MODE_PRIVATE)
+                val lastUpdateTime =
+                    simpleDateFormat.parse(
+                        sharedPreferences.getString(
+                            "lastUpdateTime",
+                            "1800-01-01T00:00:00.000UTC"
+                        ).replace("Z", "UTC")
+                    )
                 if (mService == null) {
                     Log.println(Log.WARN, "Service", "NULL Service")
-                    return emptyList()
                 } else {
                     try {
                         val response = mService!!.videos.execute()
-                        return if (response.isSuccessful && response.body() != null && response.body()!!.success) {
-                            response.body()!!.videos
+                        if (response.isSuccessful && response.body() != null && response.body()!!.success) {
+                            var currentUpdateTime = lastUpdateTime
+                            val videos = response.body()!!.videos
+                            for (video in videos) {
+                                val videoUpdateTime = simpleDateFormat.parse(video.updateDate.replace("Z", "UTC"))
+                                if (videoUpdateTime > lastUpdateTime) {
+                                    if (videoUpdateTime > currentUpdateTime) {
+                                        currentUpdateTime = videoUpdateTime
+                                    }
+                                    DataBase.getInstance(activity!!).insertVideo(video)
+                                }
+                            }
+                            sharedPreferences.edit()
+                                .putString("lastUpdateTime", simpleDateFormat.format(currentUpdateTime)).apply()
                         } else {
-                            emptyList()
                         }
                     } catch (e: IOException) {
                         Log.e("mService execute", "IOException", e)
-                        return emptyList()
                     }
                 }
+
+                return DataBase.getInstance(activity!!).getAllVideos()
             }
 
             override fun onPostExecute(result: List<Video>?) {
                 super.onPostExecute(result)
                 if (result != null) {
-                    if (result.isEmpty()) {
-                        Toast.makeText(null, "Fail", Toast.LENGTH_LONG).show()
-                        view?.mRefreshLayout?.isRefreshing = false
-                    } else {
-                        mVideos = result
-                        mAdapter?.setItems(mVideos)
-                        mAdapter?.notifyDataSetChanged()
-                        view?.mRefreshLayout?.isRefreshing = false
-                        Toast.makeText(activity,"列表已更新",Toast.LENGTH_SHORT).show()
-                    }
+                    mVideos = result
+                    mAdapter?.setItems(mVideos)
+                    mAdapter?.notifyDataSetChanged()
+                    view?.mRefreshLayout?.isRefreshing = false
+                    Toast.makeText(activity, "列表已更新", Toast.LENGTH_SHORT).show()
                 }
             }
         }

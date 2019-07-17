@@ -13,8 +13,8 @@ public class Video {
     @PrimaryKey
     @NonNull
     @SerializedName("_id")
-    @ColumnInfo(name = "_id")
-    public String id;
+    @ColumnInfo(name = "video_id")
+    public String videoId;
 
     @SerializedName("student_id")
     @ColumnInfo(name = "student_id")
