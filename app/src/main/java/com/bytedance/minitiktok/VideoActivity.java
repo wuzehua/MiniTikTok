@@ -10,9 +10,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.hardware.Camera;
-import android.media.CamcorderProfile;
-import android.media.MediaRecorder;
-import android.media.MediaScannerConnection;
+import android.media.*;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -37,10 +35,7 @@ import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -114,6 +109,21 @@ public class VideoActivity extends AppCompatActivity {
                     releaseMediaRecorder();
                     isRecording = false;
                     Toast.makeText(getApplicationContext(), "Stopped Recording", Toast.LENGTH_SHORT).show();
+                    File pictureFile = getOutputMediaFile(MEDIA_TYPE_IMAGE);
+                    FileOutputStream fos = null;
+                    try {
+                        fos = new FileOutputStream(pictureFile);
+                        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                        Bitmap bitmap = ThumbnailUtils.createVideoThumbnail(mVideoPath, MediaStore.Video.Thumbnails.MICRO_KIND);
+                        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
+                        fos.write(byteArrayOutputStream.toByteArray());
+                        fos.close();
+                        mImgPath = pictureFile.getCanonicalPath();
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 } else {
                     //todo 录制
                     isRecording = prepareVideoRecorder();

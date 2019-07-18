@@ -84,8 +84,6 @@ class MainActivity : AppCompatActivity() {
                             .replace(R.id.fragment_container, videoListFragment).commit()
                         textView.text = "最新发布"
                     }
-                    R.id.add_tab -> {
-                    }
                     R.id.like_tab -> {
                         supportFragmentManager.beginTransaction().addToBackStack(null)
                             .replace(R.id.fragment_container, likeVideoFragment).commit()
@@ -139,7 +137,6 @@ class MainActivity : AppCompatActivity() {
                         e.printStackTrace()
                         return "connection break"
                     }
-
                 }
 
                 override fun onPostExecute(s: String) {
