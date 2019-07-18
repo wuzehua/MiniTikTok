@@ -6,6 +6,7 @@ import android.view.SurfaceView
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
+import android.widget.RelativeLayout
 import android.widget.VideoView
 import androidx.recyclerview.widget.RecyclerView
 import com.bytedance.minitiktok.R
@@ -16,13 +17,15 @@ import tv.danmaku.ijk.media.player.IjkMediaPlayer
 
 class VideoViewHolder(view: View) : RecyclerView.ViewHolder(view)
 {
-    private var mVideoPlayer: IjkMediaPlayer? = null
-    private var mPlayer: VideoPlayerIJK
+    //private var mVideoPlayer: IjkMediaPlayer? = null
+    //private var mPlayer: VideoPlayerIJK
     private var mProgressBar: ProgressBar
+    private var mRelativeLayout:RelativeLayout
 
     init {
-        mPlayer = view.findViewById(R.id.ijkPlayer)
+        //mPlayer = view.findViewById(R.id.ijkPlayer)
         mProgressBar = view.findViewById(R.id.pb_videoProgress)
+        mRelativeLayout = view.ry_relative
     }
 
     companion object
@@ -38,8 +41,9 @@ class VideoViewHolder(view: View) : RecyclerView.ViewHolder(view)
     {
         if(data == null) return
 
-        mPlayer.setVideoPath(data.videoUrl)
+        //mPlayer.setVideoPath(data.videoUrl)
         mProgressBar.progress = 0
+        mRelativeLayout.tag = data.videoUrl
     }
 
 }
