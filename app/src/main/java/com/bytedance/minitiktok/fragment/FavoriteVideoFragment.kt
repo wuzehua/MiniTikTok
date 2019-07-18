@@ -11,7 +11,7 @@ class FavoriteVideoFragment(service: IMiniDouyinService?, favoriteName: String) 
         return DataBase.getInstance(activity!!).getFavoriteVideo(
             context!!.getSharedPreferences("MiniTikTok", Context.MODE_PRIVATE).getString(
                 "usr_name",
-                "unResisted"
+                "default"
             )!!, favoriteName
         )
     }

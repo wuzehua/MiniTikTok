@@ -10,7 +10,7 @@ class LikeVideoFragment(service: IMiniDouyinService?) : VideoListFragment(servic
         return DataBase.getInstance(activity!!).getUserLikeVideo(
             context!!.getSharedPreferences("MiniTikTok", Context.MODE_PRIVATE).getString(
                 "usr_name",
-                "unResisted"
+                "default"
             )!!
         )
     }
