@@ -30,7 +30,6 @@ open class VideoListFragment(service: IMiniDouyinService?) : Fragment() {
     private var mService: IMiniDouyinService? = service
     private var mAdapter: VideoListViewAdapter?
     private var mVideos: List<Video>
-    private var mVideosDB: List<Video> = ArrayList()
 
     init {
         mVideos = ArrayList()
@@ -98,7 +97,7 @@ open class VideoListFragment(service: IMiniDouyinService?) : Fragment() {
                         Log.e("mService execute", "IOException", e)
                     }
                 }
-                mAdapter?.setLikeItems(DataBase.getInstance(activity!!).getUserLikeVideo(sharedPreferences.getString("user_name","default")!!))
+                mAdapter?.setLikeItems(DataBase.getInstance(activity!!).getLike(sharedPreferences.getString("user_name","default")!!))
                 return getResultFromDB()!!
             }
 

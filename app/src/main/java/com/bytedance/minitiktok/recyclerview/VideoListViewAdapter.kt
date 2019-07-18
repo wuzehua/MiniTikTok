@@ -17,7 +17,7 @@ class VideoListViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>
 {
 
     private var items: List<Video> = ArrayList()
-    private var likeItems: List<Video> = ArrayList()
+    private var likeItems: List<String> = ArrayList()
 
     private var mActivity: Activity?
 
@@ -37,7 +37,7 @@ class VideoListViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         var liked = false
-        if(likeItems.contains(items[position]))
+        if(likeItems.contains(items[position].videoId))
         {
             liked = true
         }
@@ -62,7 +62,7 @@ class VideoListViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>
                             temp.video_id = items[position].videoId
                             DataBase.getInstance(mActivity!!).insertLike(temp)
                         }
-                        likeItems = DataBase.getInstance(mActivity!!).getUserLikeVideo(userName)
+                        likeItems = DataBase.getInstance(mActivity!!).getLike(userName)
                         return "Done"
                     }
 
@@ -93,7 +93,7 @@ class VideoListViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>
         items = value
     }
 
-    fun setLikeItems(value: List<Video>)
+    fun setLikeItems(value: List<String>)
     {
         likeItems = value
     }

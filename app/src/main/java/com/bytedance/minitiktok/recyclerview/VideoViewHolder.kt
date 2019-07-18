@@ -19,12 +19,10 @@ class VideoViewHolder(view: View) : RecyclerView.ViewHolder(view)
 {
     //private var mVideoPlayer: IjkMediaPlayer? = null
     //private var mPlayer: VideoPlayerIJK
-    private var mProgressBar: ProgressBar
     private var mRelativeLayout:RelativeLayout
 
     init {
         //mPlayer = view.findViewById(R.id.ijkPlayer)
-        mProgressBar = view.findViewById(R.id.pb_videoProgress)
         mRelativeLayout = view.ry_relative
     }
 
@@ -41,8 +39,6 @@ class VideoViewHolder(view: View) : RecyclerView.ViewHolder(view)
     {
         if(data == null) return
 
-        //mPlayer.setVideoPath(data.videoUrl)
-        mProgressBar.progress = 0
         mRelativeLayout.tag = data.videoUrl
     }
 

@@ -14,12 +14,7 @@
             <!--android:layout_centerInParent="true"-->
     <!--/>-->
 
-    <ProgressBar
-            android:id="@+id/pb_videoProgress"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            style="@android:style/Widget.Holo.ProgressBar.Horizontal"
-            android:layout_alignParentBottom="true"/>
+
 
 
 

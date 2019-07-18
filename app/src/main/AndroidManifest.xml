@@ -29,8 +29,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".VideoActivity" />
-        <activity android:name=".VideoShowActivity" />
+        <activity android:name=".VideoActivity"
+                  android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+        />
+        <activity android:name=".VideoShowActivity"
+                  android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+        />
     </application>
 
 </manifest>
