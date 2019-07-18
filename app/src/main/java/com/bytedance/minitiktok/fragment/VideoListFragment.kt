@@ -109,13 +109,12 @@ open class VideoListFragment(service: IMiniDouyinService?) : Fragment() {
 
             override fun onPostExecute(result: List<Video>?) {
                 super.onPostExecute(result)
-                if (result != null) {
-                    mVideos = result
-                    mAdapter?.setItems(mVideos)
-                    mAdapter?.notifyDataSetChanged()
-                    view?.mRefreshLayout?.isRefreshing = false
-                    Toast.makeText(activity, "列表已更新", Toast.LENGTH_SHORT).show()
-                }
+                mVideos = result ?: emptyList()
+                mAdapter?.setItems(mVideos)
+                mAdapter?.notifyDataSetChanged()
+                view?.mRefreshLayout?.isRefreshing = false
+                Toast.makeText(activity, "列表已更新", Toast.LENGTH_SHORT).show()
+
             }
         }
 

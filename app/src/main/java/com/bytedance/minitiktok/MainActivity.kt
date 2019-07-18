@@ -71,7 +71,7 @@ class MainActivity : AppCompatActivity() {
         DataBase.getInstance(this@MainActivity).insertUser(user)
 
         val videoListFragment = VideoListFragment(getService())
-        val likeVideoFragment = LikeVideoFragment(getService())
+        val likeVideoFragment = LikeVideoFragment(this@MainActivity, getService())
         supportFragmentManager.beginTransaction().add(R.id.fragment_container, videoListFragment).commit()
         //val pagerAdapter = FragmentViewPagerAdapter(supportFragmentManager)
         //pagerAdapter.addFragment(videoListFragment)
