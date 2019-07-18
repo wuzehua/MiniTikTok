@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bytedance.minitiktok.VideoActivity
 import com.bytedance.minitiktok.model.Video
 import android.os.AsyncTask
+import com.bytedance.minitiktok.R
 import com.bytedance.minitiktok.db.DataBase
 import com.bytedance.minitiktok.model.Like
 
@@ -50,7 +51,7 @@ class VideoListViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>
                 object : AsyncTask<String, Int, String>() {
                     override fun doInBackground(vararg strings: String): String {
                         val sharedPreference = mActivity?.getSharedPreferences("MiniTikTok", Context.MODE_PRIVATE)!!
-                        val userName = sharedPreference.getString("user_name","default")
+                        val userName = sharedPreference.getString("user_name",getString(R.string.un_registe_user_name))
                         if(liked)
                         {
                             DataBase.getInstance(mActivity!!).deleteLike(userName, items[position].videoId)

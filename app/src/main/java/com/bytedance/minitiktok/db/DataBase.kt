@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.bytedance.minitiktok.R
 import com.bytedance.minitiktok.api.*
 import com.bytedance.minitiktok.model.*
 
@@ -94,7 +95,7 @@ abstract class DataBase : RoomDatabase() {
     }
 
     fun updateUserPasswd(user_name: String, passwd: String) {
-        if (user_name != "default") {
+        if (user_name != "un_registe_user_name") {
             UserDao().updateUserPasswd(user_name, passwd)
         }
     }

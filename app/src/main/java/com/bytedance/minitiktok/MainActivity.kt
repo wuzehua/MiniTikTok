@@ -64,8 +64,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         var user = User()
-        user.userName = "default"
-        user.passwd = "123456"
+        user.userName = getString(R.string.un_registe_user_name)
+        user.passwd = getString(R.string.un_registe_passwd)
         initRadio()
         DataBase.getInstance(this@MainActivity).insertUser(user)
 

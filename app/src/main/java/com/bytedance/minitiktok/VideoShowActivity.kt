@@ -34,7 +34,7 @@ class VideoShowActivity : AppCompatActivity() {
     private var mVideoWidth = 0
     private var mVideoHeight = 0
     private var mDBType = 0
-    private var mUsrName = "default"
+    private var mUsrName = getString(R.string.un_registe_user_name)
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,7 +50,7 @@ class VideoShowActivity : AppCompatActivity() {
         mDBType = intent.getIntExtra("DB", 0)
 
         val sharedPreference = getSharedPreferences("MiniTikTok", Context.MODE_PRIVATE)
-        mUsrName = sharedPreference.getString("user_name", "default")
+        mUsrName = sharedPreference.getString("user_name", getString(R.string.un_registe_user_name))
 
         mLayoutManager.setOnViewPagerListener(object : OnViewPagerListener {
             override fun onInitComplete() {
@@ -130,7 +130,7 @@ class VideoShowActivity : AppCompatActivity() {
                     1 -> {
                         //mVideosDB = DataBase.getInstance(this@VideoShowActivity).getAllLikes(mUsrName)
                         val sharedPreferences = getSharedPreferences("MiniTikTok",Context.MODE_PRIVATE)
-                        val userName = sharedPreferences.getString("user_name","default")
+                        val userName = sharedPreferences.getString("user_name",getString(R.string.un_registe_user_name))
                         mVideosDB = DataBase.getInstance(this@VideoShowActivity).getUserLikeVideo(userName!!)
                     }
                     else ->{
