@@ -46,11 +46,11 @@ class VideoShowActivity : AppCompatActivity() {
         mLayoutManager = ViewPagerLayoutManager(this, OrientationHelper.VERTICAL)
         mRecyclerView.layoutManager = mLayoutManager
         mRecyclerView.adapter = mAdapter
-        val position = intent.getIntExtra("position",0)
-        mDBType = intent.getIntExtra("DB",0)
+        val position = intent.getIntExtra("position", 0)
+        mDBType = intent.getIntExtra("DB", 0)
 
-        val sharedPreference = getSharedPreferences("MiniTikTok",Context.MODE_PRIVATE)
-        mUsrName = sharedPreference.getString("user_name","default")
+        val sharedPreference = getSharedPreferences("MiniTikTok", Context.MODE_PRIVATE)
+        mUsrName = sharedPreference.getString("user_name", "default")
 
         mLayoutManager.setOnViewPagerListener(object : OnViewPagerListener {
             override fun onInitComplete() {
@@ -102,8 +102,7 @@ class VideoShowActivity : AppCompatActivity() {
         val relativeLayout: RelativeLayout = itemView.findViewById(R.id.ry_relative)
         mPlayer.setVideoPath(relativeLayout.tag as String)
         val parent = mPlayer.parent as ViewGroup?
-        if(parent != null)
-        {
+        if (parent != null) {
             parent.removeView(mPlayer)
         }
         relativeLayout.addView(mPlayer)
@@ -114,13 +113,12 @@ class VideoShowActivity : AppCompatActivity() {
         val itemView = mRecyclerView.getChildAt(position)
 //        val player: VideoPlayerIJK = itemView.findViewById(R.id.ijkPlayer)
 //        player.release()
-        val relativeLayout:RelativeLayout = itemView.findViewById(R.id.ry_relative)
+        val relativeLayout: RelativeLayout = itemView.findViewById(R.id.ry_relative)
 
         relativeLayout.removeView(mPlayer)
         try {
             mPlayer.stop()
-        }catch (e: Exception)
-        {
+        } catch (e: Exception) {
             e.printStackTrace()
         }
     }
@@ -128,13 +126,12 @@ class VideoShowActivity : AppCompatActivity() {
     private fun initFromDB(position: Int) {
         class LoadDBAsyncTask() : AsyncTask<Objects, Objects, List<Video>>() {
             override fun doInBackground(vararg p0: Objects?): List<Video> {
-                when(mDBType)
-                {
-                    1->{
+                when (mDBType) {
+                    1 -> {
                         //mVideosDB = DataBase.getInstance(this@VideoShowActivity).getAllLikes(mUsrName)
                     }
-                    else ->{
-                        mVideosDB = DataBase.getInstance(this@VideoShowActivity).getAllVideos()
+                    else -> {
+                        mVideosDB = DataBase.getInstance(this@VideoShowActivity).getVideo()
                     }
                 }
 
@@ -175,8 +172,7 @@ class VideoShowActivity : AppCompatActivity() {
         mPlayer.layoutParams = param
         try {
             mPlayer.start()
-        }catch (e: Exception)
-        {
+        } catch (e: Exception) {
             e.printStackTrace()
         }
 
