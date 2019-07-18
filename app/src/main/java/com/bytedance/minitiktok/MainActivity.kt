@@ -146,7 +146,7 @@ class MainActivity : AppCompatActivity() {
                     super.onPostExecute(s)
                     Toast.makeText(this@MainActivity, s, Toast.LENGTH_SHORT).show()
                 }
-            }.execute(data)
+            }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, data)
         }
     }
 

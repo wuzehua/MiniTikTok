@@ -91,13 +91,19 @@ open class VideoListFragment(service: IMiniDouyinService?) : Fragment() {
                             }
                             sharedPreferences.edit()
                                 .putString("lastUpdateTime", simpleDateFormat.format(currentUpdateTime)).apply()
-                        } else {
                         }
                     } catch (e: IOException) {
                         Log.e("mService execute", "IOException", e)
                     }
                 }
-                mAdapter?.setLikeItems(DataBase.getInstance(activity!!).getLike(sharedPreferences.getString("user_name",getString(R.string.un_registe_user_name))!!))
+                mAdapter?.setLikeItems(
+                    DataBase.getInstance(activity!!).getLike(
+                        sharedPreferences.getString(
+                            "user_name",
+                            getString(R.string.un_registe_user_name)
+                        )!!
+                    )
+                )
                 return getResultFromDB()!!
             }
 
@@ -114,7 +120,7 @@ open class VideoListFragment(service: IMiniDouyinService?) : Fragment() {
         }
 
         var getVideosAsyncTask = GetVideosAsyncTask()
-        getVideosAsyncTask.execute()
+        getVideosAsyncTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, null)
     }
 
     protected open fun getResultFromDB(): List<Video>? {
