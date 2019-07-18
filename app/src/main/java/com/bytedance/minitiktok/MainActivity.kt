@@ -31,6 +31,7 @@ import android.net.Uri
 import android.os.AsyncTask
 import android.widget.Button
 import android.widget.Toast
+import com.bytedance.minitiktok.model.User
 import com.bytedance.minitiktok.utils.ResourceUtils
 import com.bytedance.minitiktok.utils.Utils
 import com.bytedance.minitiktok.utils.Utils.reuqestPermissions
@@ -61,6 +62,11 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_main)
+
+        var user = User()
+        user.userName = "default"
+        user.passwd = "123456"
+        DataBase.getInstance(this@MainActivity).insertUser(user)
 
         val videoListFragment = VideoListFragment(getService())
         val likeVideoFragment = LikeVideoFragment(getService())

@@ -94,7 +94,9 @@ abstract class DataBase : RoomDatabase() {
     }
 
     fun updateUserPasswd(user_name: String, passwd: String) {
-        UserDao().updateUserPasswd(user_name, passwd)
+        if (user_name != "default") {
+            UserDao().updateUserPasswd(user_name, passwd)
+        }
     }
 
     fun deleteUser(user_name: String) {
