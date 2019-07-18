@@ -31,6 +31,7 @@ import android.net.Uri
 import android.os.AsyncTask
 import android.widget.Button
 import android.widget.Toast
+import com.bytedance.minitiktok.fragment.FavoriteVideoFragment
 import com.bytedance.minitiktok.fragment.UserFragment
 import com.bytedance.minitiktok.model.User
 import com.bytedance.minitiktok.utils.ResourceUtils
@@ -49,6 +50,8 @@ class MainActivity : AppCompatActivity() {
     private var miniDouyinService: IMiniDouyinService? = null
 
     private val REQUEST_VIDEO_CAPTURE = 1
+
+    private lateinit var mCurrentFragment:Fragment
 
     private val REQUEST_EXTERNAL_CAMERA = 101
 
@@ -72,7 +75,10 @@ class MainActivity : AppCompatActivity() {
 
         val videoListFragment = VideoListFragment(getService())
         val likeVideoFragment = LikeVideoFragment(this@MainActivity, getService())
+        val userFragment = UserFragment(this)
+        val favoriteFragment = FavoriteVideoFragment()
         supportFragmentManager.beginTransaction().add(R.id.fragment_container, videoListFragment).commit()
+        mCurrentFragment = videoListFragment
         //val pagerAdapter = FragmentViewPagerAdapter(supportFragmentManager)
         //pagerAdapter.addFragment(videoListFragment)
         //vp_viewPager.adapter = pagerAdapter
@@ -81,19 +87,20 @@ class MainActivity : AppCompatActivity() {
             override fun onCheckedChanged(radioGroup: RadioGroup?, radioId: Int) {
                 when (radioId) {
                     R.id.recommend_tab -> {
-                        supportFragmentManager.beginTransaction().addToBackStack(null)
-                            .replace(R.id.fragment_container, videoListFragment).commit()
+                        switchFragment(videoListFragment)
                         textView.text = "最新发布"
                     }
+                    R.id.record_tab -> {
+                        switchFragment(favoriteFragment)
+                        textView.text = "记录"
+                    }
                     R.id.like_tab -> {
-                        supportFragmentManager.beginTransaction().addToBackStack(null)
-                            .replace(R.id.fragment_container, likeVideoFragment).commit()
+                        switchFragment(likeVideoFragment)
                         textView.text = "Like"
                     }
                     R.id.my_tab -> {
                         textView.text = "我的"
-                        supportFragmentManager.beginTransaction().addToBackStack(null)
-                            .replace(R.id.fragment_container, UserFragment(this@MainActivity)).commit()
+                        switchFragment(userFragment)
                     }
                 }
             }
@@ -112,6 +119,31 @@ class MainActivity : AppCompatActivity() {
         })
 
         DataBase.getInstance(this@MainActivity)
+    }
+
+    private fun switchFragment(fragment: Fragment)
+    {
+        if(mCurrentFragment != fragment)
+        {
+            if(fragment.isAdded)
+            {
+                supportFragmentManager
+                    .beginTransaction()
+                    .hide(mCurrentFragment)
+                    .show(fragment)
+                    .commit()
+            }
+            else
+            {
+                supportFragmentManager
+                    .beginTransaction()
+                    .hide(mCurrentFragment)
+                    .add(R.id.fragment_container,fragment)
+                    .commit()
+            }
+
+            mCurrentFragment = fragment
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

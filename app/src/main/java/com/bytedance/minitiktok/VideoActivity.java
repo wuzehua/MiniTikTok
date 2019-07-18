@@ -31,6 +31,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.bytedance.minitiktok.response.PostResponse;
 import com.bytedance.minitiktok.utils.ResourceUtils;
 import com.bytedance.minitiktok.utils.Utils;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -50,8 +51,11 @@ public class VideoActivity extends AppCompatActivity {
     private Camera mCamera;
     private String mVideoPath = null;
     private String mImgPath = null;
+    private FloatingActionButton mRecord;
 
     private int CAMERA_TYPE = Camera.CameraInfo.CAMERA_FACING_BACK;
+
+    private boolean finishRecord = false;
 
     private boolean isRecording = false;
 
@@ -66,6 +70,7 @@ public class VideoActivity extends AppCompatActivity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_video);
 
+        mRecord = findViewById(R.id.btn_record);
         mSurfaceView = findViewById(R.id.img);
         //todo 给SurfaceHolder添加Callback
         SurfaceHolder surfaceHolder = mSurfaceView.getHolder();
@@ -92,62 +97,63 @@ public class VideoActivity extends AppCompatActivity {
             }
         });
 
-        findViewById(R.id.btn_picture).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //todo 拍一张照片
-                mCamera.takePicture(null, null, mPicture);
-            }
-        });
 
-        findViewById(R.id.btn_record).setOnClickListener(new View.OnClickListener() {
+        mRecord.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //todo 录制，第一次点击是start，第二次点击是stop
-                if (isRecording) {
-                    //todo 停止录制
-                    releaseMediaRecorder();
-                    isRecording = false;
-                    Toast.makeText(getApplicationContext(), "Stopped Recording", Toast.LENGTH_SHORT).show();
-                    File pictureFile = getOutputMediaFile(MEDIA_TYPE_IMAGE);
-                    FileOutputStream fos = null;
-                    try {
-                        fos = new FileOutputStream(pictureFile);
-                        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-                        Bitmap bitmap = ThumbnailUtils.createVideoThumbnail(mVideoPath, MediaStore.Video.Thumbnails.MICRO_KIND);
-                        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
-                        fos.write(byteArrayOutputStream.toByteArray());
-                        fos.close();
-                        mImgPath = pictureFile.getCanonicalPath();
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                } else {
-                    //todo 录制
-                    isRecording = prepareVideoRecorder();
+                if(!finishRecord) {
                     if (isRecording) {
-                        Toast.makeText(getApplicationContext(), "Recording...", Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(getApplicationContext(), "Start Recording Failed", Toast.LENGTH_SHORT).show();
+                        //todo 停止录制
+                        releaseMediaRecorder();
+                        isRecording = false;
+                        finishRecord = true;
+                        Toast.makeText(getApplicationContext(), "Stopped Recording", Toast.LENGTH_SHORT).show();
+                        File pictureFile = getOutputMediaFile(MEDIA_TYPE_IMAGE);
+                        FileOutputStream fos = null;
+                        try {
+                            fos = new FileOutputStream(pictureFile);
+                            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                            Bitmap bitmap = ThumbnailUtils.createVideoThumbnail(mVideoPath, MediaStore.Video.Thumbnails.MICRO_KIND);
+                            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
+                            fos.write(byteArrayOutputStream.toByteArray());
+                            fos.close();
+                            mImgPath = pictureFile.getCanonicalPath();
+                            mRecord.setImageResource(R.mipmap.post);
+                            mRecord.setBackgroundTintList(getResources().getColorStateList(R.color.postColor));
+                            } catch (FileNotFoundException e) {
+                                e.printStackTrace();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        } else {
+                            //todo 录制
+                            isRecording = prepareVideoRecorder();
+                            finishRecord = false;
+                            if (isRecording) {
+                                Toast.makeText(getApplicationContext(), "Recording...", Toast.LENGTH_SHORT).show();
+                                mRecord.setImageResource(R.mipmap.stop);
+                                mRecord.setBackgroundTintList(getResources().getColorStateList(R.color.stopColor));
+                            } else {
+                                Toast.makeText(getApplicationContext(), "Start Recording Failed", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }
+                else
+                {
+                    finishRecord = false;
+                    if (mVideoPath != null && mImgPath != null) {
+                        Intent intent = new Intent();
+                        intent.putExtra("mVideoPath", mVideoPath);
+                        intent.putExtra("mImgPath", mImgPath);
+                        setResult(RESULT_OK, intent);
+                        finish();
                     }
                 }
             }
         });
 
-        findViewById(R.id.btn_post).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (mVideoPath != null && mImgPath != null) {
-                    Intent intent = new Intent();
-                    intent.putExtra("mVideoPath", mVideoPath);
-                    intent.putExtra("mImgPath", mImgPath);
-                    setResult(RESULT_OK, intent);
-                    finish();
-                }
-            }
-        });
+
 
         findViewById(R.id.btn_facing).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -188,6 +194,9 @@ public class VideoActivity extends AppCompatActivity {
             }
         });
     }
+
+
+
 
     public Camera getCamera(int position) {
         CAMERA_TYPE = position;

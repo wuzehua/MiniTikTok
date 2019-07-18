@@ -2,11 +2,25 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
               android:layout_width="match_parent"
+              android:background="@android:color/black"
               android:layout_height="match_parent">
 
     <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_videoRecycler"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="0dp"
+            android:layout_weight="1"
+    >
+    </androidx.recyclerview.widget.RecyclerView>
+
+
+    <ProgressBar
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="10dp"
+            android:max="100"
+            android:visibility="visible"
+            android:background="@android:color/transparent"
+            android:id="@+id/progressBar" android:progressTint="#F1F1F1"/>
 
 </LinearLayout>

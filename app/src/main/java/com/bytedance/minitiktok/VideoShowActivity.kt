@@ -1,9 +1,8 @@
 package com.bytedance.minitiktok
 
+import android.annotation.SuppressLint
 import android.content.Context
-import android.os.AsyncTask
-import android.os.Bundle
-import android.os.PersistableBundle
+import android.os.*
 import android.util.Log
 import android.view.ViewGroup
 import android.view.WindowManager
@@ -35,6 +34,9 @@ class VideoShowActivity : AppCompatActivity() {
     private var mVideoHeight = 0
     private var mDBType = 0
     private var mUsrName: String? = null
+    private val MSG_REFRESH = 1001
+
+    private lateinit var handler: Handler
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,6 +50,19 @@ class VideoShowActivity : AppCompatActivity() {
         mRecyclerView.adapter = mAdapter
         val position = intent.getIntExtra("position", 0)
         mDBType = intent.getIntExtra("DB", 0)
+
+        handler = @SuppressLint("HandlerLeak")
+        object : Handler() {
+            override fun handleMessage(msg: Message) {
+                when (msg.what) {
+                    MSG_REFRESH -> if (mPlayer.isPlaying()) {
+                        refresh()
+                        handler.sendEmptyMessageDelayed(MSG_REFRESH, 50)
+                    }
+                }
+
+            }
+        }
 
         val sharedPreference = getSharedPreferences("MiniTikTok", Context.MODE_PRIVATE)
         mUsrName = sharedPreference.getString("user_name", getString(R.string.un_registe_user_name))
@@ -82,6 +97,13 @@ class VideoShowActivity : AppCompatActivity() {
                 }
             }
 
+            override fun onCompletion(iMediaPlayer: IMediaPlayer?) {
+                progressBar.progress = 0
+                //mPlayer.seekTo(0)
+                mPlayer.start()
+                refresh()
+            }
+
             override fun onPrepared(iMediaPlayer: IMediaPlayer?) {
                 if (iMediaPlayer != null) {
                     mVideoWidth = iMediaPlayer.videoWidth
@@ -93,6 +115,22 @@ class VideoShowActivity : AppCompatActivity() {
         })
 
         initFromDB(position)
+
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+        handler.sendEmptyMessageDelayed(MSG_REFRESH,300)
+    }
+
+    private fun refresh() {
+        val current = mPlayer.getCurrentPosition() / 1000
+        val duration = mPlayer.getDuration() / 1000
+        if (duration != 0L) {
+            progressBar.progress = (current * 100 / duration).toInt()
+        }
+
     }
 
     private fun playVideo(position: Int) {
@@ -164,11 +202,6 @@ class VideoShowActivity : AppCompatActivity() {
 
         var ratio = width.toFloat() / height.toFloat()
 
-//        if (width < height) {
-//            ratio = height.toFloat() / width.toFloat()
-//        }
-
-
         val param = mPlayer.layoutParams as RelativeLayout.LayoutParams
         param.width = width
         param.height = (ratio * mVideoHeight.toFloat()).toInt()
@@ -180,12 +213,12 @@ class VideoShowActivity : AppCompatActivity() {
             e.printStackTrace()
         }
 
+        handler.sendEmptyMessageDelayed(MSG_REFRESH,50)
 
     }
 
     override fun onDestroy() {
         mPlayer.release()
         super.onDestroy()
-
     }
 }
