@@ -1,15 +1,23 @@
 package com.bytedance.minitiktok.recyclerview
 
+import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.Context
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bytedance.minitiktok.VideoActivity
 import com.bytedance.minitiktok.model.Video
+import android.os.AsyncTask
+import com.bytedance.minitiktok.db.DataBase
+import com.bytedance.minitiktok.model.Like
+
 
 class VideoListViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>
 {
 
     private var items: List<Video> = ArrayList()
+    private var likeItems: List<Video> = ArrayList()
 
     private var mActivity: Activity?
 
@@ -28,7 +36,56 @@ class VideoListViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        (holder as VideoListViewHolder).bind(items[position], mActivity, position)
+        var liked = false
+        if(likeItems.contains(items[position]))
+        {
+            liked = true
+        }
+        (holder as VideoListViewHolder).bind(items[position], mActivity, position,liked)
+
+        holder.mLikedButton.setOnClickListener(object : View.OnClickListener
+        {
+            override fun onClick(view: View?) {
+
+                object : AsyncTask<String, Int, String>() {
+                    override fun doInBackground(vararg strings: String): String {
+                        val sharedPreference = mActivity?.getSharedPreferences("MiniTikTok", Context.MODE_PRIVATE)!!
+                        val userName = sharedPreference.getString("user_name","default")
+                        if(liked)
+                        {
+                            DataBase.getInstance(mActivity!!).deleteLike(userName, items[position].videoId)
+                        }
+                        else
+                        {
+                            val temp = Like()
+                            temp.user_name = userName
+                            temp.video_id = items[position].videoId
+                            DataBase.getInstance(mActivity!!).insertLike(temp)
+                        }
+                        likeItems = DataBase.getInstance(mActivity!!).getUserLikeVideo(userName)
+                        return "Done"
+                    }
+
+                    override fun onPostExecute(s: String) {
+                        super.onPostExecute(s)
+                        if (liked)
+                        {
+                            holder.mLikedButton.progress = 0f
+                        }else
+                        {
+                            holder.mLikedButton.speed = 2f
+                            holder.mLikedButton.playAnimation()
+                        }
+                    }
+                }.execute()
+            }
+
+        })
+
+    }
+
+    override fun onViewDetachedFromWindow(holder: RecyclerView.ViewHolder) {
+        (holder as VideoListViewHolder).mLikedButton.cancelAnimation()
     }
 
     fun setItems(value: List<Video>)
@@ -36,4 +93,8 @@ class VideoListViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>
         items = value
     }
 
+    fun setLikeItems(value: List<Video>)
+    {
+        likeItems = value
+    }
 }

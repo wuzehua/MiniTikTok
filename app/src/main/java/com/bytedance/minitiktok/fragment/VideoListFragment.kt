@@ -98,7 +98,7 @@ open class VideoListFragment(service: IMiniDouyinService?) : Fragment() {
                         Log.e("mService execute", "IOException", e)
                     }
                 }
-
+                mAdapter?.setLikeItems(DataBase.getInstance(activity!!).getUserLikeVideo(sharedPreferences.getString("user_name","default")!!))
                 return getResultFromDB()!!
             }
 

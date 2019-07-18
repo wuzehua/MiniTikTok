@@ -72,8 +72,18 @@
                         android:text="1234"
                         android:textSize="13sp" tools:ignore="RtlCompat"/>
 
+
+
             </LinearLayout>
 
+            <com.airbnb.lottie.LottieAnimationView
+                    android:id="@+id/like"
+                    app:lottie_fileName="heart.json"
+                    app:lottie_loop="false"
+                    app:lottie_autoPlay="false"
+                    android:layout_gravity="center_vertical"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"/>
 
         </LinearLayout>
 

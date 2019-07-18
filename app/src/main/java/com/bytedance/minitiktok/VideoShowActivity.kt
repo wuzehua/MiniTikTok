@@ -130,7 +130,7 @@ class VideoShowActivity : AppCompatActivity() {
                     1 -> {
                         //mVideosDB = DataBase.getInstance(this@VideoShowActivity).getAllLikes(mUsrName)
                     }
-                    else -> {
+                    else ->{
                         mVideosDB = DataBase.getInstance(this@VideoShowActivity).getVideo()
                     }
                 }

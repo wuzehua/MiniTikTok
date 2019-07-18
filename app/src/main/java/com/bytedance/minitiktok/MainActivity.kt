@@ -75,14 +75,17 @@ class MainActivity : AppCompatActivity() {
                     R.id.recommend_tab -> {
                         supportFragmentManager.beginTransaction().addToBackStack(null)
                             .replace(R.id.fragment_container, videoListFragment).commit()
+                        textView.text = "最新发布"
                     }
                     R.id.add_tab -> {
                     }
                     R.id.like_tab -> {
                         supportFragmentManager.beginTransaction().addToBackStack(null)
                             .replace(R.id.fragment_container, likeVideoFragment).commit()
+                        textView.text = "Like"
                     }
                     R.id.my_tab -> {
+                        textView.text = "我的"
 //                        supportFragmentManager.beginTransaction().addToBackStack(null)
 //                            .replace(R.id.fragment_container, VideoListFragment(getService())).commit()
                     }

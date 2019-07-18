@@ -10,6 +10,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
+import com.airbnb.lottie.LottieAnimationView
 import com.bumptech.glide.Glide
 import com.bytedance.minitiktok.R
 import com.bytedance.minitiktok.VideoActivity
@@ -23,6 +24,7 @@ class VideoListViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     private var mNameText: TextView = view.findViewById(R.id.nameText)
     private var mDateText: TextView = view.findViewById(R.id.updateDateText)
     private var mImage: ImageView = view.findViewById(R.id.img)
+    var mLikedButton: LottieAnimationView = view.findViewById(R.id.like)
 
     companion object {
         fun create(context: Context, root: ViewGroup): VideoListViewHolder {
@@ -31,7 +33,7 @@ class VideoListViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         }
     }
 
-    fun bind(data: Video?, activity: Activity?, position: Int) {
+    fun bind(data: Video?, activity: Activity?, position: Int, liked: Boolean) {
         if (data == null || activity == null) return
 
         Glide.with(activity).load(data.imageUrl).into(mImage)
@@ -45,5 +47,14 @@ class VideoListViewHolder(view: View) : RecyclerView.ViewHolder(view) {
             }
 
         })
+
+        if(liked)
+        {
+            mLikedButton.progress = 1f
+        }else
+        {
+            mLikedButton.progress = 0f
+        }
+
     }
 }
