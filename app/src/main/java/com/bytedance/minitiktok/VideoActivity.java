@@ -332,7 +332,7 @@ public class VideoActivity extends AppCompatActivity {
                 FileOutputStream fos = new FileOutputStream(pictureFile);
                 Bitmap bitmap = Utils.rotateImage(BitmapFactory.decodeByteArray(data, 0, data.length), getCameraDisplayOrientation(CAMERA_TYPE));
                 ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
                 fos.write(byteArrayOutputStream.toByteArray());
                 fos.close();
                 mImgPath = pictureFile.getCanonicalPath();
