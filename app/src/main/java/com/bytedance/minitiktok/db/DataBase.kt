@@ -52,12 +52,8 @@ abstract class DataBase : RoomDatabase() {
         return VideoDao().getVideo(videoID)
     }
 
-    fun getVideo(videoIDs: List<String>): List<Video> {
-        var res = emptySequence<Video>() as MutableList<Video>
-        for (videoID in videoIDs) {
-            res.add(VideoDao().getVideo(videoID))
-        }
-        return res
+    fun getVideo(videoID: List<String>): List<Video> {
+        return VideoDao().getVideo(videoID)
     }
 
     fun deleteVideo(id: String) {
@@ -122,12 +118,16 @@ abstract class DataBase : RoomDatabase() {
         return LikeDao().getLike(user_name)
     }
 
+    fun getUserLikeVideo(user_name: String): List<Video> {
+        return LikeDao().getUserLikeVideo(user_name)
+    }
+
     fun getLike(user_name: String, video_id: String): Boolean {
         return LikeDao().getLike(user_name, video_id).isNotEmpty()
     }
 
-    fun getUserLike(video_id: String): List<String> {
-        return LikeDao().getUserLike(video_id)
+    fun getVideoLike(video_id: String): List<String> {
+        return LikeDao().getVideoLike(video_id)
     }
 
     fun deleteLike(user_name: String, video_id: String) {

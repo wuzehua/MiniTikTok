@@ -26,7 +26,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
-class VideoListFragment(service: IMiniDouyinService?) : Fragment() {
+open class VideoListFragment(service: IMiniDouyinService?) : Fragment() {
     private var mService: IMiniDouyinService? = service
     private var mAdapter: VideoListViewAdapter?
     private var mVideos: List<Video>
@@ -71,7 +71,7 @@ class VideoListFragment(service: IMiniDouyinService?) : Fragment() {
                         sharedPreferences.getString(
                             "lastUpdateTime",
                             "1800-01-01T00:00:00.000UTC"
-                        ).replace("Z", "UTC")
+                        )!!.replace("Z", "UTC")
                     )
                 if (mService == null) {
                     Log.println(Log.WARN, "Service", "NULL Service")
@@ -99,7 +99,7 @@ class VideoListFragment(service: IMiniDouyinService?) : Fragment() {
                     }
                 }
 
-                return DataBase.getInstance(activity!!).getVideo()
+                return getResultFromDB()!!
             }
 
             override fun onPostExecute(result: List<Video>?) {
@@ -116,5 +116,9 @@ class VideoListFragment(service: IMiniDouyinService?) : Fragment() {
 
         var getVideosAsyncTask = GetVideosAsyncTask()
         getVideosAsyncTask.execute()
+    }
+
+    protected open fun getResultFromDB(): List<Video>? {
+        return DataBase.getInstance(activity!!).getVideo()
     }
 }

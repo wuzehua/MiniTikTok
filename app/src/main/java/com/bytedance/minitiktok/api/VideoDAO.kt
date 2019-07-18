@@ -11,6 +11,9 @@ interface VideoDAO {
     @Query("SELECT * FROM  videos WHERE video_id = :videoID")
     fun getVideo(videoID: String): Video
 
+    @Query("SELECT * FROM  videos WHERE video_id IN (:videoID)")
+    fun getVideo(videoID: List<String>): List<Video>
+
     @Query("DELETE FROM videos WHERE video_id = :videoID")
     fun deleteVideo(videoID: String)
 

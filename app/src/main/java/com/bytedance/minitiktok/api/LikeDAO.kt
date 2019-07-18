@@ -5,6 +5,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.bytedance.minitiktok.model.Like
+import com.bytedance.minitiktok.model.Video
 
 @Dao
 interface LikeDAO {
@@ -14,11 +15,14 @@ interface LikeDAO {
     @Query("SELECT video_id FROM likes WHERE user_name = :user_name")
     fun getLike(user_name: String): List<String>
 
+    @Query("SELECT video_id, student_id, user_name, image_url, video_url, update_date FROM likes NATURAL JOIN videos WHERE user_name = :user_name")
+    fun getUserLikeVideo(user_name: String): List<Video>
+
     @Query("SELECT * FROM likes WHERE user_name = :user_name and video_id = :video_id")
     fun getLike(user_name: String, video_id: String): List<Like>
 
     @Query("SELECT user_name FROM likes WHERE video_id = :video_id")
-    fun getUserLike(video_id: String): List<String>
+    fun getVideoLike(video_id: String): List<String>
 
     @Query("DELETE FROM likes WHERE user_name = :user_name and video_id = :video_id")
     fun deleteLike(user_name: String, video_id: String)
