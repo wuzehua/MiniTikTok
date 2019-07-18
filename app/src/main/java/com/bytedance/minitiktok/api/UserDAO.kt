@@ -26,10 +26,10 @@ interface UserDAO {
     @Query("DELETE FROM users")
     fun deleteUser()
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insertUser(user: User)
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insertUser(users: List<User>)
 
     @Query("UPDATE users SET passwd = :passwd WHERE user_name = :user_name")

@@ -46,6 +46,7 @@ class MainActivity : AppCompatActivity() {
 
     private var retrofit: Retrofit? = null
     private var miniDouyinService: IMiniDouyinService? = null
+    private var miniDouyinPostService: IMiniDouyinService? = null
 
     private val REQUEST_VIDEO_CAPTURE = 1
 
@@ -120,13 +121,14 @@ class MainActivity : AppCompatActivity() {
 
         if (requestCode == REQUEST_VIDEO_CAPTURE && resultCode == Activity.RESULT_OK) {
 
-            val coverImagePart = getMultipartFromPath("cover_image", data!!.extras.getString("mImgPath"))
-            val videoPart = getMultipartFromPath("video", data!!.extras.getString("mVideoPath"))
-            object : AsyncTask<Any, Int, String>() {
-                override fun doInBackground(vararg objects: Any): String {
+            object : AsyncTask<Intent, Int, String>() {
+                override fun doInBackground(vararg data: Intent): String {
                     try {
+                        val coverImagePart =
+                            getMultipartFromPath("cover_image", data.get(0).extras.getString("mImgPath"))
+                        val videoPart = getMultipartFromPath("video", data.get(0).extras.getString("mVideoPath"))
                         val postResponse =
-                            getService()?.postVideo(
+                            getPostService()?.postVideo(
                                 "3170105369",
                                 "shenmishajing",
                                 coverImagePart,
@@ -145,7 +147,7 @@ class MainActivity : AppCompatActivity() {
                     super.onPostExecute(s)
                     Toast.makeText(this@MainActivity, s, Toast.LENGTH_SHORT).show()
                 }
-            }.execute()
+            }.execute(data)
         }
     }
 
@@ -179,23 +181,39 @@ class MainActivity : AppCompatActivity() {
         return miniDouyinService
     }
 
-    private fun initRadio()
-    {
+    private fun getPostService(): IMiniDouyinService? {
+        if (retrofit == null) {
+            retrofit = Retrofit.Builder()
+                .baseUrl(IMiniDouyinService.BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+        }
+
+        if (miniDouyinPostService == null) {
+            miniDouyinPostService = retrofit?.create(IMiniDouyinService::class.java)
+        }
+
+        if (miniDouyinPostService == null)
+            println("PostService NULL")
+        return miniDouyinPostService
+    }
+
+    private fun initRadio() {
         val draw_main = resources.getDrawable(R.drawable.tab_main_selector)
-        draw_main.setBounds(0,0,100,100)
-        recommend_tab.setCompoundDrawables(null,draw_main,null,null)
+        draw_main.setBounds(0, 0, 100, 100)
+        recommend_tab.setCompoundDrawables(null, draw_main, null, null)
 
         val draw_record = resources.getDrawable(R.drawable.tab_record_selector)
-        draw_record.setBounds(0,0,100,100)
-        record_tab.setCompoundDrawables(null,draw_record,null,null)
+        draw_record.setBounds(0, 0, 100, 100)
+        record_tab.setCompoundDrawables(null, draw_record, null, null)
 
         val draw_like = resources.getDrawable(R.drawable.tab_like_selector)
-        draw_like.setBounds(0,0,100,100)
-        like_tab.setCompoundDrawables(null,draw_like,null,null)
+        draw_like.setBounds(0, 0, 100, 100)
+        like_tab.setCompoundDrawables(null, draw_like, null, null)
 
         val draw_me = resources.getDrawable(R.drawable.tab_me_selector)
-        draw_me.setBounds(0,0,100,100)
-        my_tab.setCompoundDrawables(null,draw_me,null,null)
+        draw_me.setBounds(0, 0, 100, 100)
+        my_tab.setCompoundDrawables(null, draw_me, null, null)
 
     }
 }
