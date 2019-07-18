@@ -1,5 +1,6 @@
 package com.bytedance.minitiktok
 
+import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -46,8 +47,7 @@ class MainActivity : AppCompatActivity() {
                             .replace(R.id.fragment_container, videoListFragment).commit()
                     }
                     R.id.add_tab -> {
-//                        supportFragmentManager.beginTransaction().addToBackStack(null)
-//                            .replace(R.id.fragment_container, VideoListFragment(getService())).commit()
+                        startActivity(Intent(this@MainActivity, VideoActivity::class.java));
                     }
                     R.id.like_tab -> {
                         supportFragmentManager.beginTransaction().addToBackStack(null)

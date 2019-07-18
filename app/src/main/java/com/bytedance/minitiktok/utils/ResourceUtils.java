@@ -1,4 +1,4 @@
-package com.bytedance.minitiktok.util;
+package com.bytedance.minitiktok.utils;
 
 import android.annotation.SuppressLint;
 import android.content.ContentUris;
