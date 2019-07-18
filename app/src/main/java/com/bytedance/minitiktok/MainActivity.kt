@@ -25,13 +25,21 @@ import retrofit2.converter.gson.GsonConverterFactory
 import android.Manifest.permission
 import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
 import android.Manifest.permission.RECORD_AUDIO
+import android.annotation.SuppressLint
+import android.app.Activity
+import android.net.Uri
+import android.os.AsyncTask
+import android.widget.Button
+import android.widget.Toast
+import com.bytedance.minitiktok.utils.ResourceUtils
 import com.bytedance.minitiktok.utils.Utils
 import com.bytedance.minitiktok.utils.Utils.reuqestPermissions
 import com.bytedance.minitiktok.utils.Utils.isPermissionsReady
-
-
-
-
+import okhttp3.MediaType
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import java.io.File
+import java.io.IOException
 
 class MainActivity : AppCompatActivity() {
 
@@ -68,9 +76,8 @@ class MainActivity : AppCompatActivity() {
                         supportFragmentManager.beginTransaction().addToBackStack(null)
                             .replace(R.id.fragment_container, videoListFragment).commit()
                     }
-//                    R.id.add_tab -> {
-//                        startActivity(Intent(this@MainActivity, VideoActivity::class.java));
-//                    }
+                    R.id.add_tab -> {
+                    }
                     R.id.like_tab -> {
                         supportFragmentManager.beginTransaction().addToBackStack(null)
                             .replace(R.id.fragment_container, likeVideoFragment).commit()
@@ -84,11 +91,10 @@ class MainActivity : AppCompatActivity() {
 
         })
 
-        post_button.setOnClickListener(object: View.OnClickListener
-        {
+        post_button.setOnClickListener(object : View.OnClickListener {
             override fun onClick(view: View?) {
                 if (Utils.isPermissionsReady(this@MainActivity, permissions)) {
-                    startActivity(Intent(this@MainActivity, VideoActivity::class.java))
+                    startActivityForResult(Intent(this@MainActivity, VideoActivity::class.java), REQUEST_VIDEO_CAPTURE)
                 } else {
                     Utils.reuqestPermissions(this@MainActivity, permissions, REQUEST_EXTERNAL_CAMERA)
                 }
@@ -99,11 +105,50 @@ class MainActivity : AppCompatActivity() {
         DataBase.getInstance(this@MainActivity)
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == REQUEST_VIDEO_CAPTURE && resultCode == Activity.RESULT_OK) {
+
+            val coverImagePart = getMultipartFromPath("cover_image", data!!.extras.getString("mImgPath"))
+            val videoPart = getMultipartFromPath("video", data!!.extras.getString("mVideoPath"))
+            object : AsyncTask<Any, Int, String>() {
+                override fun doInBackground(vararg objects: Any): String {
+                    try {
+                        val postResponse =
+                            getService()?.postVideo(
+                                "3170105369",
+                                "shenmishajing",
+                                coverImagePart,
+                                videoPart
+                            )!!.execute()
+                                .body()
+                        return postResponse?.getUrl()!!
+                    } catch (e: IOException) {
+                        e.printStackTrace()
+                        return "connection break"
+                    }
+
+                }
+
+                override fun onPostExecute(s: String) {
+                    super.onPostExecute(s)
+                    Toast.makeText(this@MainActivity, s, Toast.LENGTH_SHORT).show()
+                }
+            }.execute()
+        }
+    }
+
+    private fun getMultipartFromPath(name: String, path: String): MultipartBody.Part {
+        val f = File(path)
+        val requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), f)
+        return MultipartBody.Part.createFormData(name, f.name, requestFile)
+    }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         when (requestCode) {
             REQUEST_EXTERNAL_CAMERA -> if (Utils.isPermissionsReady(this, permissions))
-                startActivity(Intent(this@MainActivity, VideoActivity::class.java))
+                startActivityForResult(Intent(this@MainActivity, VideoActivity::class.java), REQUEST_VIDEO_CAPTURE)
         }
     }
 

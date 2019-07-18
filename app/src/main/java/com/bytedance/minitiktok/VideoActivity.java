@@ -1,8 +1,10 @@
 package com.bytedance.minitiktok;
 
 import android.annotation.SuppressLint;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Point;
@@ -12,6 +14,7 @@ import android.media.CamcorderProfile;
 import android.media.MediaRecorder;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -27,7 +30,12 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import com.bytedance.minitiktok.response.PostResponse;
+import com.bytedance.minitiktok.utils.ResourceUtils;
 import com.bytedance.minitiktok.utils.Utils;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -45,6 +53,8 @@ public class VideoActivity extends AppCompatActivity {
 
     private SurfaceView mSurfaceView;
     private Camera mCamera;
+    private String mVideoPath = null;
+    private String mImgPath = null;
 
     private int CAMERA_TYPE = Camera.CameraInfo.CAMERA_FACING_BACK;
 
@@ -112,6 +122,19 @@ public class VideoActivity extends AppCompatActivity {
                     } else {
                         Toast.makeText(getApplicationContext(), "Start Recording Failed", Toast.LENGTH_SHORT).show();
                     }
+                }
+            }
+        });
+
+        findViewById(R.id.btn_post).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mVideoPath != null && mImgPath != null) {
+                    Intent intent = new Intent();
+                    intent.putExtra("mVideoPath", mVideoPath);
+                    intent.putExtra("mImgPath", mImgPath);
+                    setResult(RESULT_OK, intent);
+                    finish();
                 }
             }
         });
@@ -264,7 +287,13 @@ public class VideoActivity extends AppCompatActivity {
 
         mMediaRecorder.setProfile(CamcorderProfile.get(CamcorderProfile.QUALITY_HIGH));
 
-        mMediaRecorder.setOutputFile(Objects.requireNonNull(getOutputMediaFile(MEDIA_TYPE_VIDEO)).toString());
+        try {
+            mVideoPath = getOutputMediaFile(MEDIA_TYPE_VIDEO).getCanonicalPath();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        mMediaRecorder.setOutputFile(mVideoPath);
 
         mMediaRecorder.setPreviewDisplay(mSurfaceView.getHolder().getSurface());
         mMediaRecorder.setOrientationHint(rotationDegree);
@@ -306,8 +335,9 @@ public class VideoActivity extends AppCompatActivity {
                 bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
                 fos.write(byteArrayOutputStream.toByteArray());
                 fos.close();
+                mImgPath = pictureFile.getCanonicalPath();
                 MediaScannerConnection.scanFile(getApplicationContext(), new String[]{pictureFile.getAbsolutePath()}, null, null);
-                Toast.makeText(getApplicationContext(), pictureFile.getAbsolutePath(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), pictureFile.getCanonicalPath(), Toast.LENGTH_SHORT).show();
             } catch (
                     IOException e) {
                 Log.d("mPicture", "Error accessing file: " + e.getMessage());
