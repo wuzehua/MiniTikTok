@@ -249,7 +249,7 @@ abstract class DataBase : RoomDatabase() {
         return FavoriteVideoDao().getVideoFavoriteVideo(video_id)
     }
 
-    fun getFavoriteVideo(user_name: String, favorite_name: String): List<String> {
+    fun getFavoriteVideo(user_name: String, favorite_name: String): List<Video> {
         return FavoriteVideoDao().getFavoriteVideo(user_name, favorite_name)
     }
 
