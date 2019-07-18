@@ -31,6 +31,7 @@ import android.net.Uri
 import android.os.AsyncTask
 import android.widget.Button
 import android.widget.Toast
+import com.bytedance.minitiktok.fragment.UserFragment
 import com.bytedance.minitiktok.model.User
 import com.bytedance.minitiktok.utils.ResourceUtils
 import com.bytedance.minitiktok.utils.Utils
@@ -91,8 +92,8 @@ class MainActivity : AppCompatActivity() {
                     }
                     R.id.my_tab -> {
                         textView.text = "我的"
-//                        supportFragmentManager.beginTransaction().addToBackStack(null)
-//                            .replace(R.id.fragment_container, VideoListFragment(getService())).commit()
+                        supportFragmentManager.beginTransaction().addToBackStack(null)
+                            .replace(R.id.fragment_container, UserFragment(this@MainActivity)).commit()
                     }
                 }
             }
