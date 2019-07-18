@@ -4,11 +4,13 @@ import androidx.annotation.NonNull
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
+import androidx.room.Index
 import com.google.gson.annotations.SerializedName
 
 @Entity(
     tableName = "comments",
     primaryKeys = ["user_name", "video_id", "comment"],
+    indices = [Index("video_id"), Index("user_name")],
     foreignKeys = [ForeignKey(
         entity = Video::class,
         parentColumns = ["video_id"],

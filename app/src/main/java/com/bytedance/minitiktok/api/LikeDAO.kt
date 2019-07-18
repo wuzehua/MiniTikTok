@@ -15,7 +15,7 @@ interface LikeDAO {
     @Query("SELECT video_id FROM likes WHERE user_name = :user_name")
     fun getLike(user_name: String): List<String>
 
-    @Query("SELECT video_id, student_id, user_name, image_url, video_url, update_date FROM likes NATURAL JOIN videos WHERE user_name = :user_name")
+    @Query("SELECT videos.video_id, student_id, videos.user_name, image_url, video_url, update_date FROM likes JOIN videos ON videos.video_id = likes.video_id WHERE likes.user_name = :user_name")
     fun getUserLikeVideo(user_name: String): List<Video>
 
     @Query("SELECT * FROM likes WHERE user_name = :user_name and video_id = :video_id")

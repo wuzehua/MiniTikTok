@@ -4,11 +4,13 @@ import androidx.annotation.NonNull
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
+import androidx.room.Index
 import com.google.gson.annotations.SerializedName
 
 @Entity(
     tableName = "favorites",
     primaryKeys = ["user_name", "favorite_name"],
+    indices = [Index("user_name")],
     foreignKeys = [ForeignKey(
         entity = User::class,
         parentColumns = ["user_name"],
