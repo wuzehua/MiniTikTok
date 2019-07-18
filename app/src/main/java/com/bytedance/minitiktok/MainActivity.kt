@@ -46,7 +46,6 @@ class MainActivity : AppCompatActivity() {
 
     private var retrofit: Retrofit? = null
     private var miniDouyinService: IMiniDouyinService? = null
-    private var miniDouyinPostService: IMiniDouyinService? = null
 
     private val REQUEST_VIDEO_CAPTURE = 1
 
@@ -128,7 +127,7 @@ class MainActivity : AppCompatActivity() {
                             getMultipartFromPath("cover_image", data.get(0).extras.getString("mImgPath"))
                         val videoPart = getMultipartFromPath("video", data.get(0).extras.getString("mVideoPath"))
                         val postResponse =
-                            getPostService()?.postVideo(
+                            getService()?.postVideo(
                                 "3170105369",
                                 "shenmishajing",
                                 coverImagePart,
@@ -179,23 +178,6 @@ class MainActivity : AppCompatActivity() {
         if (miniDouyinService == null)
             println("Service NULL")
         return miniDouyinService
-    }
-
-    private fun getPostService(): IMiniDouyinService? {
-        if (retrofit == null) {
-            retrofit = Retrofit.Builder()
-                .baseUrl(IMiniDouyinService.BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
-        }
-
-        if (miniDouyinPostService == null) {
-            miniDouyinPostService = retrofit?.create(IMiniDouyinService::class.java)
-        }
-
-        if (miniDouyinPostService == null)
-            println("PostService NULL")
-        return miniDouyinPostService
     }
 
     private fun initRadio() {

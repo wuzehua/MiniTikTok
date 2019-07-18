@@ -34,7 +34,7 @@ class VideoShowActivity : AppCompatActivity() {
     private var mVideoWidth = 0
     private var mVideoHeight = 0
     private var mDBType = 0
-    private var mUsrName = getString(R.string.un_registe_user_name)
+    private var mUsrName: String? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -105,7 +105,7 @@ class VideoShowActivity : AppCompatActivity() {
         if (parent != null) {
             parent.removeView(mPlayer)
         }
-        relativeLayout.addView(mPlayer,-1)
+        relativeLayout.addView(mPlayer, -1)
 
     }
 
@@ -129,11 +129,12 @@ class VideoShowActivity : AppCompatActivity() {
                 when (mDBType) {
                     1 -> {
                         //mVideosDB = DataBase.getInstance(this@VideoShowActivity).getAllLikes(mUsrName)
-                        val sharedPreferences = getSharedPreferences("MiniTikTok",Context.MODE_PRIVATE)
-                        val userName = sharedPreferences.getString("user_name",getString(R.string.un_registe_user_name))
+                        val sharedPreferences = getSharedPreferences("MiniTikTok", Context.MODE_PRIVATE)
+                        val userName =
+                            sharedPreferences.getString("user_name", getString(R.string.un_registe_user_name))
                         mVideosDB = DataBase.getInstance(this@VideoShowActivity).getUserLikeVideo(userName!!)
                     }
-                    else ->{
+                    else -> {
                         mVideosDB = DataBase.getInstance(this@VideoShowActivity).getVideo()
                     }
                 }
