@@ -33,6 +33,7 @@ class MainActivity : AppCompatActivity() {
 
         val videoListFragment = VideoListFragment(getService())
         val likeVideoFragment = LikeVideoFragment(getService())
+        supportFragmentManager.beginTransaction().add(R.id.fragment_container, videoListFragment).commit()
         //val pagerAdapter = FragmentViewPagerAdapter(supportFragmentManager)
         //pagerAdapter.addFragment(videoListFragment)
         //vp_viewPager.adapter = pagerAdapter
@@ -53,8 +54,8 @@ class MainActivity : AppCompatActivity() {
                             .replace(R.id.fragment_container, likeVideoFragment).commit()
                     }
                     R.id.my_tab -> {
-                        supportFragmentManager.beginTransaction().addToBackStack(null)
-                            .replace(R.id.fragment_container, VideoListFragment(getService())).commit()
+//                        supportFragmentManager.beginTransaction().addToBackStack(null)
+//                            .replace(R.id.fragment_container, VideoListFragment(getService())).commit()
                     }
                 }
             }
