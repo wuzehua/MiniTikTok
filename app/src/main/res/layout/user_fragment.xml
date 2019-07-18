@@ -12,7 +12,7 @@
             android:inputType="textPersonName" android:singleLine="false"
             app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" android:layout_marginBottom="8dp"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            app:layout_constraintBottom_toBottomOf="parent" android:textAlignment="center"/>
 
     <com.deadline.statebutton.StateButton android:id="@+id/button"
                                           android:layout_width="200dp" android:layout_height="wrap_content"
