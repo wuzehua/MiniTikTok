@@ -15,7 +15,28 @@
     <!--/>-->
 
 
+    <TextView
+            android:textColor="@android:color/white"
+            android:id="@+id/user_name_text"
+            android:text="Test"
+            android:textSize="20sp"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/date_text" android:layout_marginBottom="10dp"
+            android:transitionName="userName"
+            android:layout_alignParentStart="true" android:layout_marginStart="20dp" android:shadowColor="#00302E2E"/>
 
+    <TextView
+            android:id="@+id/date_text"
+            android:text="1970-01-01"
+            android:maxLength="10"
+            android:textColor="@android:color/darker_gray"
+            android:layout_width="200dp"
+            android:textSize="15sp"
+            android:transitionName="updateDate"
+            android:layout_height="wrap_content" android:layout_alignParentBottom="true"
+            android:layout_marginBottom="20dp" android:layout_alignParentStart="true"
+            android:layout_marginStart="20dp"/>
 
 
 

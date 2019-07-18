@@ -66,6 +66,7 @@ class MainActivity : AppCompatActivity() {
         var user = User()
         user.userName = "default"
         user.passwd = "123456"
+        initRadio()
         DataBase.getInstance(this@MainActivity).insertUser(user)
 
         val videoListFragment = VideoListFragment(getService())
@@ -176,5 +177,25 @@ class MainActivity : AppCompatActivity() {
         if (miniDouyinService == null)
             println("Service NULL")
         return miniDouyinService
+    }
+
+    private fun initRadio()
+    {
+        val draw_main = resources.getDrawable(R.drawable.tab_main_selector)
+        draw_main.setBounds(0,0,100,100)
+        recommend_tab.setCompoundDrawables(null,draw_main,null,null)
+
+        val draw_record = resources.getDrawable(R.drawable.tab_record_selector)
+        draw_record.setBounds(0,0,100,100)
+        record_tab.setCompoundDrawables(null,draw_record,null,null)
+
+        val draw_like = resources.getDrawable(R.drawable.tab_like_selector)
+        draw_like.setBounds(0,0,100,100)
+        like_tab.setCompoundDrawables(null,draw_like,null,null)
+
+        val draw_me = resources.getDrawable(R.drawable.tab_me_selector)
+        draw_me.setBounds(0,0,100,100)
+        my_tab.setCompoundDrawables(null,draw_me,null,null)
+
     }
 }

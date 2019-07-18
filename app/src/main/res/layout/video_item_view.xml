@@ -59,6 +59,7 @@
                     android:textColor="@android:color/black"
                     android:textSize="20sp"
                     android:textStyle="bold"
+                    android:transitionName="userName"
                     tools:ignore="NestedWeights,RtlCompat" />
 
                 <TextView
@@ -70,6 +71,7 @@
                         android:maxLength="10"
                         android:paddingStart="10dp"
                         android:text="1234"
+                        android:transitionName="updateDate"
                         android:textSize="13sp" tools:ignore="RtlCompat"/>
 
 

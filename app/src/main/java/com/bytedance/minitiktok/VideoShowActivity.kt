@@ -105,7 +105,7 @@ class VideoShowActivity : AppCompatActivity() {
         if (parent != null) {
             parent.removeView(mPlayer)
         }
-        relativeLayout.addView(mPlayer)
+        relativeLayout.addView(mPlayer,-1)
 
     }
 
@@ -129,6 +129,9 @@ class VideoShowActivity : AppCompatActivity() {
                 when (mDBType) {
                     1 -> {
                         //mVideosDB = DataBase.getInstance(this@VideoShowActivity).getAllLikes(mUsrName)
+                        val sharedPreferences = getSharedPreferences("MiniTikTok",Context.MODE_PRIVATE)
+                        val userName = sharedPreferences.getString("user_name","default")
+                        mVideosDB = DataBase.getInstance(this@VideoShowActivity).getUserLikeVideo(userName!!)
                     }
                     else ->{
                         mVideosDB = DataBase.getInstance(this@VideoShowActivity).getVideo()
@@ -160,9 +163,9 @@ class VideoShowActivity : AppCompatActivity() {
 
         var ratio = width.toFloat() / height.toFloat()
 
-        if (width < height) {
-            ratio = height.toFloat() / width.toFloat()
-        }
+//        if (width < height) {
+//            ratio = height.toFloat() / width.toFloat()
+//        }
 
 
         val param = mPlayer.layoutParams as RelativeLayout.LayoutParams

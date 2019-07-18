@@ -7,11 +7,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import android.widget.RelativeLayout
+import android.widget.TextView
 import android.widget.VideoView
 import androidx.recyclerview.widget.RecyclerView
 import com.bytedance.minitiktok.R
 import com.bytedance.minitiktok.model.Video
 import com.bytedance.minitiktok.player.VideoPlayerIJK
+import kotlinx.android.synthetic.main.video_item_view.view.*
 import kotlinx.android.synthetic.main.video_view_layout.view.*
 import tv.danmaku.ijk.media.player.IjkMediaPlayer
 
@@ -20,10 +22,14 @@ class VideoViewHolder(view: View) : RecyclerView.ViewHolder(view)
     //private var mVideoPlayer: IjkMediaPlayer? = null
     //private var mPlayer: VideoPlayerIJK
     private var mRelativeLayout:RelativeLayout
+    private var mNameText: TextView
+    private var mDateText: TextView
 
     init {
         //mPlayer = view.findViewById(R.id.ijkPlayer)
         mRelativeLayout = view.ry_relative
+        mNameText = view.user_name_text
+        mDateText = view.date_text
     }
 
     companion object
@@ -40,6 +46,9 @@ class VideoViewHolder(view: View) : RecyclerView.ViewHolder(view)
         if(data == null) return
 
         mRelativeLayout.tag = data.videoUrl
+        mNameText.text = data.userName
+        mDateText.text = data.updateDate
+
     }
 
 }

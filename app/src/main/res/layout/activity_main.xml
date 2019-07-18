@@ -29,14 +29,24 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintBottom_toTopOf="@+id/radio"
-            app:layout_constraintTop_toBottomOf="@+id/textView"/>
+            app:layout_constraintTop_toBottomOf="@+id/textView">
+    </FrameLayout>
 
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/post_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true" app:srcCompat="@android:drawable/ic_menu_camera"
+            android:layout_marginBottom="5dp" app:layout_constraintBottom_toBottomOf="@+id/radio"
+            app:layout_constraintEnd_toEndOf="@+id/radio"
+            app:layout_constraintStart_toStartOf="@+id/radio" app:backgroundTint="#000000"/>
 
     <RadioGroup
             android:id="@+id/radio"
             android:layout_width="match_parent"
             android:layout_height="56dp"
-            android:background="#dcdcdc"
+            android:background="#E2E2E2"
             android:orientation="horizontal"
             android:layout_alignParentBottom="true"
             app:layout_constraintBottom_toBottomOf="parent">
@@ -46,8 +56,10 @@
                 android:layout_width="0dp"
                 android:layout_height="56dp"
                 android:layout_weight="1"
-                android:background="#FF0000"
+                style="@style/Custom.TabRadioButton"
+                android:drawableTop="@drawable/tab_main_selector"
                 android:checked="true"
+                android:textSize="0dp"
                 android:text="推荐"/>
 
         <RadioButton
@@ -55,7 +67,10 @@
                 android:layout_width="0dp"
                 android:layout_height="56dp"
                 android:layout_weight="1"
-                android:background="#00FF00"
+                style="@style/Custom.TabRadioButton"
+                android:drawableTop="@drawable/tab_record_selector"
+                android:background="@android:color/transparent"
+                android:textSize="0dp"
                 android:text="记录"/>
 
         <View
@@ -63,7 +78,7 @@
                 android:layout_width="0dp"
                 android:layout_height="56dp"
                 android:layout_weight="1"
-                android:background="#FFFFFF">
+                android:background="#E2E2E2">
         </View>
 
         <RadioButton
@@ -71,7 +86,10 @@
                 android:layout_width="0dp"
                 android:layout_height="56dp"
                 android:layout_weight="1"
-                android:background="#0000FF"
+                style="@style/Custom.TabRadioButton"
+                android:drawableTop="@drawable/tab_like_selector"
+                android:background="@android:color/transparent"
+                android:textSize="0dp"
                 android:text="收藏"/>
 
         <RadioButton
@@ -79,17 +97,13 @@
                 android:layout_width="0dp"
                 android:layout_height="56dp"
                 android:layout_weight="1"
-                android:background="#7F2F2F"
+                style="@style/Custom.TabRadioButton"
+                android:drawableTop="@drawable/tab_me_selector"
+                android:background="@android:color/transparent"
+                android:textSize="0dp"
                 android:text="我的"/>
     </RadioGroup>
 
-    <Button
-            android:id="@+id/post_button"
-            android:text="Post"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/radio"/>
 
 
 

@@ -72,6 +72,7 @@ dependencies {
 
     implementation 'com.airbnb.android:lottie:3.0.7'
     implementation 'com.github.niniloveyou:StateButton:v1.0.0'
+    implementation 'com.google.android.material:material:1.0.0'
 }
 
 configurations.all {
