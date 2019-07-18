@@ -98,10 +98,10 @@ class LikeVideoFragment(service: IMiniDouyinService?) : Fragment() {
                     }
                 }
                 val usr_name = sharedPreferences.getString("usr_name", "unResisted")
-                val videos = dataBase.getAllVideos()
+                val videos = dataBase.getVideo()
                 val res: MutableList<Video> = emptySequence<Video>().toMutableList()
                 for (video in videos) {
-                    if (dataBase.getisLiked(usr_name, video.videoId)) {
+                    if (dataBase.getLike(usr_name, video.videoId)) {
                         res += video
                     }
                 }

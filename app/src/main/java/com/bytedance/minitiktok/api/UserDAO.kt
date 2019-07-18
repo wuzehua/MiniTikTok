@@ -9,25 +9,28 @@ import com.bytedance.minitiktok.model.User
 @Dao
 interface UserDAO {
     @Query("SELECT * FROM  users ORDER BY user_name")
-    fun getAllUsers(): List<User>
+    fun getUser(): List<User>
+
+    @Query("SELECT * FROM users WHERE user_name = :user_name")
+    fun getUser(user_name: String): User
 
     @Query("SELECT passwd FROM users WHERE user_name = :user_name")
     fun getPasswd(user_name: String): String
 
-    @Query("SELECT * FROM users WHERE user_name = :user_name")
-    fun getUser(user_name: String): User
+    @Query("SELECT * FROM users WHERE user_name = :user_name and passwd = :passwd")
+    fun getUser(user_name: String, passwd: String): List<User>
 
     @Query("DELETE FROM users WHERE user_name = :user_name")
     fun deleteUser(user_name: String)
 
     @Query("DELETE FROM users")
-    fun deleteAllUsers()
+    fun deleteUser()
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertUser(user: User)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertVideos(users: List<User>)
+    fun insertUser(users: List<User>)
 
     @Query("UPDATE users SET passwd = :passwd WHERE user_name = :user_name")
     fun updateUserPasswd(user_name: String, passwd: String)

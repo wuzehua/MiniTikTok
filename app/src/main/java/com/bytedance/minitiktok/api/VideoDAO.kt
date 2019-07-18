@@ -6,17 +6,20 @@ import com.bytedance.minitiktok.model.Video
 @Dao
 interface VideoDAO {
     @Query("SELECT * FROM  videos ORDER BY update_date DESC")
-    fun getAllVideos(): List<Video>
+    fun getVideo(): List<Video>
+
+    @Query("SELECT * FROM  videos WHERE video_id = :videoID")
+    fun getVideo(videoID: String): Video
 
     @Query("DELETE FROM videos WHERE video_id = :videoID")
     fun deleteVideo(videoID: String)
 
     @Query("DELETE FROM videos")
-    fun deleteAllVideos()
+    fun deleteVideo()
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertVideo(video: Video)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertVideos(videos: List<Video>)
+    fun insertVideo(video: List<Video>)
 }

@@ -99,7 +99,7 @@ class VideoListFragment(service: IMiniDouyinService?) : Fragment() {
                     }
                 }
 
-                return DataBase.getInstance(activity!!).getAllVideos()
+                return DataBase.getInstance(activity!!).getVideo()
             }
 
             override fun onPostExecute(result: List<Video>?) {
