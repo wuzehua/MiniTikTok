@@ -7,7 +7,11 @@ import androidx.room.RoomDatabase
 import com.bytedance.minitiktok.api.*
 import com.bytedance.minitiktok.model.*
 
-@Database(entities = [Video::class, User::class, Like::class], version = 1, exportSchema = false)
+@Database(
+    entities = [Video::class, User::class, Like::class, Comment::class, Favorite::class, FavoriteVideo::class],
+    version = 1,
+    exportSchema = false
+)
 abstract class DataBase : RoomDatabase() {
 
     abstract fun VideoDao(): VideoDAO

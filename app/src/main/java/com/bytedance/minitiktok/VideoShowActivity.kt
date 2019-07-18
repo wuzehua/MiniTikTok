@@ -23,14 +23,13 @@ import java.io.IOException
 import java.util.*
 import kotlin.collections.ArrayList
 
-class VideoShowActivity : AppCompatActivity()
-{
+class VideoShowActivity : AppCompatActivity() {
 
-    private lateinit var mRecyclerView:RecyclerView
+    private lateinit var mRecyclerView: RecyclerView
     private lateinit var mAdapter: VideoViewAdapter
     private lateinit var mLayoutManager: ViewPagerLayoutManager
-    private var mVideosDB:List<Video>? = null
-    private lateinit var mPlayer:VideoPlayerIJK
+    private var mVideosDB: List<Video>? = null
+    private lateinit var mPlayer: VideoPlayerIJK
     private var mVideoWidth = 0
     private var mVideoHeight = 0
 
@@ -41,17 +40,17 @@ class VideoShowActivity : AppCompatActivity()
         mPlayer = VideoPlayerIJK(this)
         mRecyclerView = rv_videoRecycler
         mAdapter = VideoViewAdapter()
-        mLayoutManager = ViewPagerLayoutManager(this,OrientationHelper.VERTICAL)
+        mLayoutManager = ViewPagerLayoutManager(this, OrientationHelper.VERTICAL)
         mRecyclerView.layoutManager = mLayoutManager
         mRecyclerView.adapter = mAdapter
-        val position = intent.getIntExtra("position",0)
+        val position = intent.getIntExtra("position", 0)
 
-        mLayoutManager.setOnViewPagerListener(object: OnViewPagerListener{
+        mLayoutManager.setOnViewPagerListener(object : OnViewPagerListener {
             override fun onInitComplete() {
                 playVideo(0)
             }
 
-            override fun onPageRelease(isNext:Boolean, position: Int) {
+            override fun onPageRelease(isNext: Boolean, position: Int) {
                 var index = 0
                 if (isNext) {
                     index = 0
@@ -67,18 +66,17 @@ class VideoShowActivity : AppCompatActivity()
 
         })
 
-        mPlayer.setListener(object: VideoPlayerListener()
-        {
+        mPlayer.setListener(object : VideoPlayerListener() {
             override fun onVideoSizeChanged(iMediaPlayer: IMediaPlayer?, i: Int, i1: Int, i2: Int, i3: Int) {
                 //super.onVideoSizeChanged(iMediaPlayer, i, i1, i2, i3)
-                if(iMediaPlayer != null) {
+                if (iMediaPlayer != null) {
                     mVideoWidth = iMediaPlayer.videoWidth
                     mVideoHeight = iMediaPlayer.videoHeight
                 }
             }
 
             override fun onPrepared(iMediaPlayer: IMediaPlayer?) {
-                if(iMediaPlayer != null) {
+                if (iMediaPlayer != null) {
                     mVideoWidth = iMediaPlayer.videoWidth
                     mVideoHeight = iMediaPlayer.videoHeight
                 }
@@ -90,40 +88,35 @@ class VideoShowActivity : AppCompatActivity()
         initFromDB(position)
     }
 
-    private fun playVideo(position: Int)
-    {
+    private fun playVideo(position: Int) {
         val itemView = mRecyclerView.getChildAt(0)
         //val player:VideoPlayerIJK = itemView.findViewById(R.id.ijkPlayer)
         //player.start()
-        val relativeLayout:RelativeLayout = itemView.findViewById(R.id.ry_relative)
+        val relativeLayout: RelativeLayout = itemView.findViewById(R.id.ry_relative)
         mPlayer.setVideoPath(relativeLayout.tag as String)
         relativeLayout.addView(mPlayer)
 
     }
 
-    private fun releaseVideo(position: Int)
-    {
+    private fun releaseVideo(position: Int) {
         val itemView = mRecyclerView.getChildAt(position)
 //        val player: VideoPlayerIJK = itemView.findViewById(R.id.ijkPlayer)
 //        player.release()
-        val relativeLayout:RelativeLayout = itemView.findViewById(R.id.ry_relative)
+        val relativeLayout: RelativeLayout = itemView.findViewById(R.id.ry_relative)
         relativeLayout.removeView(mPlayer)
         mPlayer.stop()
     }
 
-    private fun initFromDB(position: Int)
-    {
-        class LoadDBAsyncTask(): AsyncTask<Objects, Objects, List<Video>>()
-        {
+    private fun initFromDB(position: Int) {
+        class LoadDBAsyncTask() : AsyncTask<Objects, Objects, List<Video>>() {
             override fun doInBackground(vararg p0: Objects?): List<Video> {
-                mVideosDB = DataBase.getInstance(this@VideoShowActivity).getAllVideos()
+                mVideosDB = DataBase.getInstance(this@VideoShowActivity).getVideo()
                 return mVideosDB!!
             }
 
             override fun onPostExecute(result: List<Video>?) {
                 super.onPostExecute(result)
-                if(result != null)
-                {
+                if (result != null) {
                     mAdapter.setItems(mVideosDB!!)
                     mAdapter.notifyDataSetChanged()
                     mRecyclerView.scrollToPosition(position)
@@ -136,16 +129,14 @@ class VideoShowActivity : AppCompatActivity()
     }
 
 
-    private fun initPlayer()
-    {
+    private fun initPlayer() {
         val windowManager = this.getSystemService(Context.WINDOW_SERVICE) as WindowManager
         val height = windowManager.defaultDisplay.height
         val width = windowManager.defaultDisplay.width
 
         var ratio = width.toFloat() / height.toFloat()
 
-        if(width < height)
-        {
+        if (width < height) {
             ratio = height.toFloat() / width.toFloat()
         }
 
