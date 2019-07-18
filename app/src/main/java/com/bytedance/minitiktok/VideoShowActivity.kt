@@ -5,6 +5,7 @@ import android.os.AsyncTask
 import android.os.Bundle
 import android.os.PersistableBundle
 import android.util.Log
+import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.RelativeLayout
 import androidx.appcompat.app.AppCompatActivity
@@ -32,6 +33,8 @@ class VideoShowActivity : AppCompatActivity() {
     private lateinit var mPlayer: VideoPlayerIJK
     private var mVideoWidth = 0
     private var mVideoHeight = 0
+    private var mDBType = 0
+    private var mUsrName = "default"
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,7 +46,11 @@ class VideoShowActivity : AppCompatActivity() {
         mLayoutManager = ViewPagerLayoutManager(this, OrientationHelper.VERTICAL)
         mRecyclerView.layoutManager = mLayoutManager
         mRecyclerView.adapter = mAdapter
-        val position = intent.getIntExtra("position", 0)
+        val position = intent.getIntExtra("position",0)
+        mDBType = intent.getIntExtra("DB",0)
+
+        val sharedPreference = getSharedPreferences("MiniTikTok",Context.MODE_PRIVATE)
+        mUsrName = sharedPreference.getString("user_name","default")
 
         mLayoutManager.setOnViewPagerListener(object : OnViewPagerListener {
             override fun onInitComplete() {
@@ -94,6 +101,11 @@ class VideoShowActivity : AppCompatActivity() {
         //player.start()
         val relativeLayout: RelativeLayout = itemView.findViewById(R.id.ry_relative)
         mPlayer.setVideoPath(relativeLayout.tag as String)
+        val parent = mPlayer.parent as ViewGroup?
+        if(parent != null)
+        {
+            parent.removeView(mPlayer)
+        }
         relativeLayout.addView(mPlayer)
 
     }
@@ -102,15 +114,30 @@ class VideoShowActivity : AppCompatActivity() {
         val itemView = mRecyclerView.getChildAt(position)
 //        val player: VideoPlayerIJK = itemView.findViewById(R.id.ijkPlayer)
 //        player.release()
-        val relativeLayout: RelativeLayout = itemView.findViewById(R.id.ry_relative)
+        val relativeLayout:RelativeLayout = itemView.findViewById(R.id.ry_relative)
+
         relativeLayout.removeView(mPlayer)
-        mPlayer.stop()
+        try {
+            mPlayer.stop()
+        }catch (e: Exception)
+        {
+            e.printStackTrace()
+        }
     }
 
     private fun initFromDB(position: Int) {
         class LoadDBAsyncTask() : AsyncTask<Objects, Objects, List<Video>>() {
             override fun doInBackground(vararg p0: Objects?): List<Video> {
-                mVideosDB = DataBase.getInstance(this@VideoShowActivity).getVideo()
+                when(mDBType)
+                {
+                    1->{
+                        //mVideosDB = DataBase.getInstance(this@VideoShowActivity).getAllLikes(mUsrName)
+                    }
+                    else ->{
+                        mVideosDB = DataBase.getInstance(this@VideoShowActivity).getAllVideos()
+                    }
+                }
+
                 return mVideosDB!!
             }
 
@@ -146,7 +173,13 @@ class VideoShowActivity : AppCompatActivity() {
         param.height = (ratio * mVideoHeight.toFloat()).toInt()
         param.addRule(RelativeLayout.CENTER_IN_PARENT)
         mPlayer.layoutParams = param
-        mPlayer.start()
+        try {
+            mPlayer.start()
+        }catch (e: Exception)
+        {
+            e.printStackTrace()
+        }
+
 
     }
 
