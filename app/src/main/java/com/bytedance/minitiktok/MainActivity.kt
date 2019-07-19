@@ -92,7 +92,7 @@ class MainActivity : AppCompatActivity() {
                     }
                     R.id.record_tab -> {
                         switchFragment(favoriteFragment)
-                        textView.text = "记录"
+                        textView.text = "收藏"
                     }
                     R.id.like_tab -> {
                         switchFragment(likeVideoFragment)
