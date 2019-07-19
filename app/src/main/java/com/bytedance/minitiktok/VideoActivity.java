@@ -1,45 +1,29 @@
 package com.bytedance.minitiktok;
 
 import android.annotation.SuppressLint;
-import android.content.ContentValues;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Point;
-import android.graphics.Rect;
 import android.hardware.Camera;
 import android.media.*;
-import android.net.Uri;
-import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import com.bytedance.minitiktok.response.PostResponse;
-import com.bytedance.minitiktok.utils.ResourceUtils;
 import com.bytedance.minitiktok.utils.Utils;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import okhttp3.MediaType;
-import okhttp3.MultipartBody;
-import okhttp3.RequestBody;
 
 import java.io.*;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import static com.bytedance.minitiktok.utils.Utils.MEDIA_TYPE_IMAGE;
 import static com.bytedance.minitiktok.utils.Utils.MEDIA_TYPE_VIDEO;
@@ -102,7 +86,7 @@ public class VideoActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //todo 录制，第一次点击是start，第二次点击是stop
-                if(!finishRecord) {
+                if (!finishRecord) {
                     if (isRecording) {
                         //todo 停止录制
                         releaseMediaRecorder();
@@ -121,26 +105,24 @@ public class VideoActivity extends AppCompatActivity {
                             mImgPath = pictureFile.getCanonicalPath();
                             mRecord.setImageResource(R.mipmap.post);
                             mRecord.setBackgroundTintList(getResources().getColorStateList(R.color.postColor));
-                            } catch (FileNotFoundException e) {
-                                e.printStackTrace();
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        //todo 录制
+                        isRecording = prepareVideoRecorder();
+                        finishRecord = false;
+                        if (isRecording) {
+                            Toast.makeText(getApplicationContext(), "Recording...", Toast.LENGTH_SHORT).show();
+                            mRecord.setImageResource(R.mipmap.stop);
+                            mRecord.setBackgroundTintList(getResources().getColorStateList(R.color.stopColor));
                         } else {
-                            //todo 录制
-                            isRecording = prepareVideoRecorder();
-                            finishRecord = false;
-                            if (isRecording) {
-                                Toast.makeText(getApplicationContext(), "Recording...", Toast.LENGTH_SHORT).show();
-                                mRecord.setImageResource(R.mipmap.stop);
-                                mRecord.setBackgroundTintList(getResources().getColorStateList(R.color.stopColor));
-                            } else {
-                                Toast.makeText(getApplicationContext(), "Start Recording Failed", Toast.LENGTH_SHORT).show();
-                            }
+                            Toast.makeText(getApplicationContext(), "Start Recording Failed", Toast.LENGTH_SHORT).show();
                         }
                     }
-                else
-                {
+                } else {
                     finishRecord = false;
                     if (mVideoPath != null && mImgPath != null) {
                         Intent intent = new Intent();
@@ -152,7 +134,6 @@ public class VideoActivity extends AppCompatActivity {
                 }
             }
         });
-
 
 
         findViewById(R.id.btn_facing).setOnClickListener(new View.OnClickListener() {
@@ -180,6 +161,8 @@ public class VideoActivity extends AppCompatActivity {
             public void onClick(View view) {
                 //todo 调焦，需要判断手机是否支持
                 if (mCamera != null && getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_AUTOFOCUS)) {
+                    Camera.Parameters parameters = mCamera.getParameters();
+                    mCamera.cancelAutoFocus();
                     mCamera.autoFocus(new Camera.AutoFocusCallback() {
                         @Override
                         public void onAutoFocus(boolean success, Camera camera) {
@@ -190,12 +173,11 @@ public class VideoActivity extends AppCompatActivity {
                             }
                         }
                     });
+                    mCamera.setParameters(parameters);
                 }
             }
         });
     }
-
-
 
 
     public Camera getCamera(int position) {
@@ -205,9 +187,12 @@ public class VideoActivity extends AppCompatActivity {
         }
         Camera cam = Camera.open(position);
 
-        //todo 摄像头添加属性，例是否自动对焦，设置旋转方向等
         rotationDegree = getCameraDisplayOrientation(position);
         cam.setDisplayOrientation(rotationDegree);
+
+        cam.cancelAutoFocus();
+
+        //todo 摄像头添加属性，例是否自动对焦，设置旋转方向等
 
         Camera.Parameters parameters = cam.getParameters();
 
@@ -224,12 +209,11 @@ public class VideoActivity extends AppCompatActivity {
 
         if (parameters.getSupportedFlashModes() != null) {
             if (parameters.getSupportedFlashModes().contains(Camera.Parameters.FLASH_MODE_AUTO)) {
-                parameters.setFocusMode(Camera.Parameters.FLASH_MODE_AUTO);
+                parameters.setFlashMode(Camera.Parameters.FLASH_MODE_AUTO);
             }
         }
 
         cam.setParameters(parameters);
-
 
         return cam;
     }
