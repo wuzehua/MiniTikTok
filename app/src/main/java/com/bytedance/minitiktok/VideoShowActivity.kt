@@ -3,7 +3,9 @@ package com.bytedance.minitiktok
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.*
+import android.text.Layout
 import android.util.Log
+import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.RelativeLayout
@@ -11,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.bytedance.minitiktok.player.VideoPlayerIJK
 import androidx.recyclerview.widget.OrientationHelper
 import androidx.recyclerview.widget.RecyclerView
+import com.airbnb.lottie.LottieAnimationView
 import com.bytedance.minitiktok.db.DataBase
 import com.bytedance.minitiktok.model.Video
 import com.bytedance.minitiktok.player.VideoPlayerListener
@@ -36,6 +39,8 @@ class VideoShowActivity : AppCompatActivity() {
     private var mUsrName: String? = null
     private val MSG_REFRESH = 1001
     private val MSG_SET_ZERO = 1002
+    private var mLoading: LottieAnimationView? = null
+
 
     private lateinit var handler: Handler
 
@@ -115,6 +120,8 @@ class VideoShowActivity : AppCompatActivity() {
                     mVideoHeight = iMediaPlayer.videoHeight
                 }
                 initPlayer()
+                mLoading?.cancelAnimation()
+                mLoading?.visibility = View.GONE
                 super.onPrepared(iMediaPlayer)
             }
         })
@@ -144,12 +151,15 @@ class VideoShowActivity : AppCompatActivity() {
         //val player:VideoPlayerIJK = itemView.findViewById(R.id.ijkPlayer)
         //player.start()
         val relativeLayout: RelativeLayout = itemView.findViewById(R.id.ry_relative)
+        mLoading = itemView.findViewById(R.id.loading)
         mPlayer.setVideoPath(relativeLayout.tag as String)
         val parent = mPlayer.parent as ViewGroup?
         if (parent != null) {
             parent.removeView(mPlayer)
         }
         relativeLayout.addView(mPlayer, 0)
+        mLoading?.visibility = View.VISIBLE
+        mLoading?.playAnimation()
     }
 
     private fun releaseVideo(position: Int) {
