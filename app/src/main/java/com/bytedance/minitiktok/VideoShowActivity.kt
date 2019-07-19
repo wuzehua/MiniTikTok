@@ -35,6 +35,7 @@ class VideoShowActivity : AppCompatActivity() {
     private var mDBType = 0
     private var mUsrName: String? = null
     private val MSG_REFRESH = 1001
+    private val MSG_SET_ZERO = 1002
 
     private lateinit var handler: Handler
 
@@ -58,6 +59,9 @@ class VideoShowActivity : AppCompatActivity() {
                     MSG_REFRESH -> if (mPlayer.isPlaying()) {
                         refresh()
                         handler.sendEmptyMessageDelayed(MSG_REFRESH, 50)
+                    }
+                    MSG_SET_ZERO -> {
+                        progressBar.progress = 0
                     }
                 }
 
@@ -83,6 +87,7 @@ class VideoShowActivity : AppCompatActivity() {
             }
 
             override fun onPageSelected(postion: Int, isBottom: Boolean) {
+
                 playVideo(0)
             }
 
@@ -121,19 +126,20 @@ class VideoShowActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        handler.sendEmptyMessageDelayed(MSG_REFRESH,300)
+        handler.sendEmptyMessageDelayed(MSG_REFRESH, 300)
     }
 
     private fun refresh() {
-        val current = mPlayer.getCurrentPosition() / 1000
-        val duration = mPlayer.getDuration() / 1000
-        if (duration != 0L) {
+        val current = mPlayer.getCurrentPosition()
+        val duration = mPlayer.getDuration()
+        if (duration > 0) {
             progressBar.progress = (current * 100 / duration).toInt()
         }
 
     }
 
     private fun playVideo(position: Int) {
+        handler.sendEmptyMessage(MSG_SET_ZERO)
         val itemView = mRecyclerView.getChildAt(0)
         //val player:VideoPlayerIJK = itemView.findViewById(R.id.ijkPlayer)
         //player.start()
@@ -143,8 +149,7 @@ class VideoShowActivity : AppCompatActivity() {
         if (parent != null) {
             parent.removeView(mPlayer)
         }
-        relativeLayout.addView(mPlayer, -1)
-
+        relativeLayout.addView(mPlayer, 0)
     }
 
     private fun releaseVideo(position: Int) {
@@ -200,11 +205,11 @@ class VideoShowActivity : AppCompatActivity() {
         val height = windowManager.defaultDisplay.height
         val width = windowManager.defaultDisplay.width
 
-        var ratio = width.toFloat() / height.toFloat()
+        val factor = Math.min(height.toDouble() / mVideoHeight.toDouble(), width.toDouble() / mVideoWidth.toDouble())
 
         val param = mPlayer.layoutParams as RelativeLayout.LayoutParams
-        param.width = width
-        param.height = (ratio * mVideoHeight.toFloat()).toInt()
+        param.width = (mVideoWidth * factor).toInt()
+        param.height = (factor * mVideoHeight).toInt()
         param.addRule(RelativeLayout.CENTER_IN_PARENT)
         mPlayer.layoutParams = param
         try {
@@ -213,7 +218,7 @@ class VideoShowActivity : AppCompatActivity() {
             e.printStackTrace()
         }
 
-        handler.sendEmptyMessageDelayed(MSG_REFRESH,50)
+        handler.sendEmptyMessageDelayed(MSG_REFRESH, 50)
 
     }
 

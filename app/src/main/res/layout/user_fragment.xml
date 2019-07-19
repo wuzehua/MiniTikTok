@@ -1,51 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <EditText
-            android:id="@+id/editText"
-            android:layout_width="300dp"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="textPersonName" android:singleLine="false"
-            app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" android:layout_marginBottom="8dp"
-            app:layout_constraintBottom_toBottomOf="parent" android:textAlignment="center"/>
+        android:id="@+id/editText"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:cursorVisible="false"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:singleLine="false"
+        android:textAlignment="center"
+        android:textCursorDrawable="@null"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <com.deadline.statebutton.StateButton android:id="@+id/button"
-                                          android:layout_width="200dp" android:layout_height="wrap_content"
+    <com.deadline.statebutton.StateButton
+        android:id="@+id/button"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
 
-                                          android:text="切换用户"
-                                          android:textSize="18sp"
-                                          android:textAlignment="center"
-                                          android:textAllCaps="false"
+        android:layout_marginTop="30dp"
+        android:text="切换用户"
+        android:textAlignment="center"
+        android:textAllCaps="false"
 
-                                          app:round="true"
-                                          app:radius="10dp"
-                                          app:animationDuration="200"
+        android:textSize="18sp"
+        app:animationDuration="200"
+        app:layout_constraintEnd_toEndOf="parent"
 
-                                          app:normalStrokeWidth="2dp"
-                                          app:pressedStrokeWidth="2dp"
-                                          app:unableStrokeWidth="2dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editText"
+        app:normalBackgroundColor="@android:color/black"
 
-                                          app:normalStrokeColor="@android:color/black"
-                                          app:pressedStrokeColor="@android:color/white"
-                                          app:unableStrokeColor="@android:color/darker_gray"
+        app:normalStrokeColor="@android:color/black"
+        app:normalStrokeWidth="2dp"
+        app:normalTextColor="@android:color/white"
 
-                                          app:normalTextColor="@android:color/white"
-                                          app:pressedTextColor="@android:color/black"
-                                          app:unableTextColor="@android:color/white"
+        app:pressedBackgroundColor="@android:color/white"
+        app:pressedStrokeColor="@android:color/white"
+        app:pressedStrokeWidth="2dp"
 
-                                          app:normalBackgroundColor="@android:color/black"
-                                          app:pressedBackgroundColor="@android:color/white"
-                                          app:unableBackgroundColor="@android:color/darker_gray"
+        app:pressedTextColor="@android:color/black"
+        app:radius="10dp"
+        app:round="true"
 
 
-                                          app:layout_constraintEnd_toEndOf="parent"
-                                          app:layout_constraintStart_toStartOf="parent"
-                                          app:layout_constraintTop_toBottomOf="@+id/editText"
-                                          android:layout_marginTop="30dp"/>
+        app:unableBackgroundColor="@android:color/darker_gray"
+        app:unableStrokeColor="@android:color/darker_gray"
+        app:unableStrokeWidth="2dp"
+        app:unableTextColor="@android:color/white" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

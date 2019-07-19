@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import com.bytedance.minitiktok.R
 import com.bytedance.minitiktok.db.DataBase
 import com.bytedance.minitiktok.model.User
+import com.deadline.statebutton.setState
 import kotlinx.android.synthetic.main.user_fragment.*
 import kotlinx.android.synthetic.main.user_fragment.view.*
 
@@ -37,6 +38,8 @@ open class UserFragment(context: Context) : Fragment() {
                 DataBase.getInstance(context!!).insertUser(user)
                 sharedPreference.edit().putString("user_name", editText.text.toString()).apply()
                 view.editText.setHint(view.editText.text)
+                view.editText.setText("")
+                view.requestFocus()
             }
         })
         return view
