@@ -2,6 +2,7 @@ package com.bytedance.minitiktok
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.SharedPreferences
 import android.os.*
 import android.text.Layout
 import android.util.Log
@@ -44,10 +45,13 @@ class VideoShowActivity : AppCompatActivity() {
 
     private lateinit var handler: Handler
 
+    private lateinit var sharedPreference: SharedPreferences
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_ijk_video)
+        sharedPreference = this.getSharedPreferences("MiniTikTok", Context.MODE_PRIVATE)
         mPlayer = VideoPlayerIJK(this)
         mRecyclerView = rv_videoRecycler
         mAdapter = VideoViewAdapter()
@@ -55,7 +59,7 @@ class VideoShowActivity : AppCompatActivity() {
         mRecyclerView.layoutManager = mLayoutManager
         mRecyclerView.adapter = mAdapter
         val position = intent.getIntExtra("position", 0)
-        mDBType = intent.getIntExtra("DB", 0)
+        mDBType = sharedPreference.getInt("DB", 0)
 
         handler = @SuppressLint("HandlerLeak")
         object : Handler() {

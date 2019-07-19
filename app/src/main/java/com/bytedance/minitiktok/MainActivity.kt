@@ -27,6 +27,8 @@ import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
 import android.Manifest.permission.RECORD_AUDIO
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.Context
+import android.content.SharedPreferences
 import android.net.Uri
 import android.os.AsyncTask
 import android.widget.Button
@@ -51,9 +53,11 @@ class MainActivity : AppCompatActivity() {
 
     private val REQUEST_VIDEO_CAPTURE = 1
 
-    private lateinit var mCurrentFragment:Fragment
+    private lateinit var mCurrentFragment: Fragment
 
     private val REQUEST_EXTERNAL_CAMERA = 101
+
+    private lateinit var sharedPreference: SharedPreferences
 
     private val permissions = arrayOf<String>(
         Manifest.permission.CAMERA,
@@ -66,6 +70,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_main)
+        sharedPreference = this.getSharedPreferences("MiniTikTok", Context.MODE_PRIVATE)
 
         var user = User()
         user.userName = getString(R.string.un_registe_user_name)
@@ -87,18 +92,22 @@ class MainActivity : AppCompatActivity() {
             override fun onCheckedChanged(radioGroup: RadioGroup?, radioId: Int) {
                 when (radioId) {
                     R.id.recommend_tab -> {
+                        sharedPreference.edit().putInt("DB", 0).apply()
                         switchFragment(videoListFragment)
                         textView.text = "最新发布"
                     }
                     R.id.record_tab -> {
+                        sharedPreference.edit().putInt("DB", 2).apply()
                         switchFragment(favoriteFragment)
                         textView.text = "收藏"
                     }
                     R.id.like_tab -> {
+                        sharedPreference.edit().putInt("DB", 1).apply()
                         switchFragment(likeVideoFragment)
                         textView.text = "Like"
                     }
                     R.id.my_tab -> {
+                        sharedPreference.edit().putInt("DB", 0).apply()
                         textView.text = "我的"
                         switchFragment(userFragment)
                     }
@@ -121,24 +130,19 @@ class MainActivity : AppCompatActivity() {
         DataBase.getInstance(this@MainActivity)
     }
 
-    private fun switchFragment(fragment: Fragment)
-    {
-        if(mCurrentFragment != fragment)
-        {
-            if(fragment.isAdded)
-            {
+    private fun switchFragment(fragment: Fragment) {
+        if (mCurrentFragment != fragment) {
+            if (fragment.isAdded) {
                 supportFragmentManager
                     .beginTransaction()
                     .hide(mCurrentFragment)
                     .show(fragment)
                     .commit()
-            }
-            else
-            {
+            } else {
                 supportFragmentManager
                     .beginTransaction()
                     .hide(mCurrentFragment)
-                    .add(R.id.fragment_container,fragment)
+                    .add(R.id.fragment_container, fragment)
                     .commit()
             }
 
